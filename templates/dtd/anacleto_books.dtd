@@ -1,0 +1,24 @@
+<!ELEMENT xml-body (shelf)+>
+<!ELEMENT shelf ( shelf | book )+>
+<!ATTLIST shelf
+  name CDATA #REQUIRED
+  title CDATA #IMPLIED
+  titlepage CDATA #IMPLIED
+  encoding CDATA #IMPLIED
+>
+<!ELEMENT book EMPTY>
+<!ATTLIST book
+  name CDATA #REQUIRED
+  title CDATA #IMPLIED
+  titlepage CDATA #IMPLIED
+  encoding CDATA #IMPLIED
+  location CDATA #IMPLIED
+  contentStyleSheet CDATA #IMPLIED
+  contentType CDATA #IMPLIED
+  nxt3IndexingStyleSheet CDATA #IMPLIED
+  nxt3Descriptor CDATA #IMPLIED
+  scheduled (true|false) "false"
+  schedulingCronExpression CDATA #IMPLIED
+  user CDATA #IMPLIED
+  password CDATA #IMPLIED
+>

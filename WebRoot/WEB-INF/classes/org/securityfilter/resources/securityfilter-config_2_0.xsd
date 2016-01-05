@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSPY v5 rel. 4 U (http://www.xmlspy.com) by Max Cooper (eBuilt, Inc.) -->
+<!-- edited with XML Spy v4.3 U (http://www.xmlspy.com) by arch (arch) -->
+<xs:schema targetNamespace="http://www.securityfilter.org/namespace" xmlns="http://www.securityfilter.org/namespace" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="securityfilter-config">
+		<xs:annotation>
+			<xs:documentation>Root element for securityfilter config</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="security-constraint" minOccurs="0" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="display-name" type="xs:string" minOccurs="0"/>
+							<xs:element name="web-resource-collection" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="web-resource-name" type="xs:string"/>
+										<xs:element ref="description" minOccurs="0"/>
+										<xs:element name="url-pattern" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+										<xs:element name="http-method" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="auth-constraint" minOccurs="0">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element ref="description" minOccurs="0"/>
+										<xs:element ref="role-name" minOccurs="0" maxOccurs="unbounded"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="user-data-constraint" minOccurs="0">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element ref="description"/>
+										<xs:element name="transport-guarantee">
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:enumeration value="NONE"/>
+													<xs:enumeration value="INTEGRAL"/>
+													<xs:enumeration value="CONFIDENTIAL"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="login-config">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="auth-method" minOccurs="0">
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:pattern value="FORM"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="realm-name" type="xs:string" minOccurs="0"/>
+							<xs:element name="form-login-config" minOccurs="0">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="form-login-page" type="xs:string"/>
+										<xs:element name="form-error-page" type="xs:string"/>
+										<xs:element name="form-default-page" type="xs:string"/>
+										<xs:element name="form-logout-page" type="xs:string" minOccurs="0"/>
+										<xs:element name="remember-me" minOccurs="0">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="remember-me-param" minOccurs="0" maxOccurs="unbounded">
+														<xs:complexType>
+															<xs:attribute name="name" type="xs:string" use="required"/>
+															<xs:attribute name="value" type="xs:string" use="required"/>
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
+												<xs:attribute name="className" type="xs:string" use="required"/>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="security-role" minOccurs="0" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="description"/>
+							<xs:element ref="role-name"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="realm" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="realm-param" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:attribute name="name" type="xs:string" use="required"/>
+									<xs:attribute name="value" type="xs:string" use="required"/>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+						<xs:attribute name="className" type="xs:string" use="required"/>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="description" type="xs:string"/>
+	<xs:element name="role-name" type="xs:string"/>
+</xs:schema>

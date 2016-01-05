@@ -1,0 +1,294 @@
+<?xml version="1.0"?>
+<project name="Anacleto" default="deploy" basedir=".">
+
+	<property file="build.properties" />
+
+	<property name="src.dir" value="${basedir}/src" />
+	<property name="test.dir" value="${basedir}/test" />
+	<property name="web.dir" value="${basedir}/adminsite/web" />
+
+	<property name="lib.dir" value="${basedir}/lib/dependencies" />
+	<property name="j2ee.lib.dir" value="${basedir}/lib/j2eelibs" />
+	<property name="junit.lib.dir" value="${basedir}/lib/junit" />
+	<property name="ant.lib.dir" value="${basedir}/lib/antlibs" />
+
+	<taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask">
+		<classpath>
+			<fileset dir="${basedir}/lib/antlibs" includes="**/*.jar"></fileset>
+		</classpath>
+	</taskdef>
+	<taskdef name="checkstyle" classname="com.puppycrawl.tools.checkstyle.CheckStyleTask" >
+		<classpath>
+			<fileset dir="${basedir}/lib/antlibs" includes="**/*.jar"></fileset>
+		</classpath>
+	</taskdef>
+
+	<property name="build.dir" value="${basedir}/build" />
+
+	<property name="build.classes.dir" value="${build.dir}/classes/java" />
+	<property name="test.classes.dir" value="${build.dir}/classes/test" />
+
+	<property name="build.compiler" value="classic" />
+
+	<property name="report.dir" location="${build.dir}/reports" />
+
+	<property name="checkstyle.config" value="${basedir}/buildscript/sun_checks.xml" />
+	<property name="checkstyle.xsl" value="${basedir}/buildscript/checkstyle-noframes-sorted.xsl" />
+
+	<property name="junit.output.dir" location="${build.dir}/test" />
+	<property name="jdepend.output.dir" location="${build.dir}/jdepend" />
+
+	<property name="findbugs.output.dir" location="${build.dir}/findbugs" />
+
+	<path id="classpath">
+		<pathelement location="${build.classes.dir}" />
+		<fileset dir="${lib.dir}">
+			<include name="*.jar" />
+		</fileset>
+		<fileset dir="${j2ee.lib.dir}">
+			<include name="*.jar" />
+		</fileset>
+		<fileset dir="${junit.lib.dir}">
+			<include name="*.jar" />
+		</fileset>
+		<fileset dir="${ant.lib.dir}">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<path id="junit.classpath">
+		<pathelement location="${test.classes.dir}" />
+		<path refid="classpath" />
+	</path>
+
+	<target name="prepare">
+		<mkdir dir="${build.dir}" />
+		<mkdir dir="${build.classes.dir}" />
+		<mkdir dir="${test.classes.dir}" />
+		<mkdir dir="${report.dir}" />
+	</target>
+
+	<!-- ================================================================== -->
+	<!-- Compile classes                                                    -->
+	<!-- ================================================================== -->
+	<!--                                                                    -->
+	<!-- ================================================================== -->
+	<target name="compile" depends="prepare">
+		<javac srcdir="${src.dir}" destdir="${build.classes.dir}" debug="on" deprecation="on" optimize="off" failonerror="false" includes="**/*.java" compiler="modern">
+
+			<classpath refid="classpath" />
+		</javac>
+	</target>
+
+	<!-- ================================================================== -->
+	<!-- Compile test classes                                               -->
+	<!-- ================================================================== -->
+	<!--                                                                    -->
+	<!-- ================================================================== -->
+	<target name="compile-test" depends="prepare">
+		<javac srcdir="${test.dir}" destdir="${test.classes.dir}" debug="on" deprecation="on" optimize="off" failonerror="false" includes="**/*.java" compiler="modern">
+
+			<classpath refid="classpath" />
+		</javac>
+	</target>
+
+	<!-- ================================================================== -->
+	<!-- Create test reports                                                -->
+	<!-- ================================================================== -->
+	<!--                                                                    -->
+	<!-- ================================================================== -->
+	<target name="test" depends="compile, compile-test" description="Runs unit tests">
+
+		<mkdir dir="${junit.output.dir}" />
+		<junit printsummary="off" haltonfailure="no" errorProperty="tests.failed" failureProperty="tests.failed">
+			<classpath refid="junit.classpath" />
+			<sysproperty key="dataDir" file="test" />
+			<sysproperty key="tempDir" file="${build.dir}/test" />
+			<formatter type="xml" />
+			<formatter type="brief" usefile="false" />
+
+			<batchtest fork="yes" todir="${junit.output.dir}" unless="testcase">
+				<fileset dir="test" includes="**/Test*.java" />
+			</batchtest>
+			<batchtest fork="yes" todir="${junit.output.dir}" if="testcase">
+				<fileset dir="test" includes="**/${testcase}.java" />
+			</batchtest>
+		</junit>
+
+		<fail if="tests.failed">Tests failed!</fail>
+
+		<mkdir dir="${report.dir}" />
+		<junitreport todir="${junit.output.dir}">
+			<fileset dir="${junit.output.dir}">
+				<include name="TEST-*.xml" />
+			</fileset>
+			<report format="frames" todir="${report.dir}" />
+		</junitreport>
+	</target>
+
+	<!-- ================================================================== -->
+	<!-- Jdepend reports                                                    -->
+	<!-- ================================================================== -->
+	<!--                                                                    -->
+	<!-- ================================================================== -->
+	<target name="jdepend">
+		<mkdir dir="${jdepend.output.dir}" />
+		<jdepend format="xml" outputfile="${jdepend.output.dir}/jdepend-report.xml">
+			<sourcespath>
+				<pathelement location="${src.dir}" />
+			</sourcespath>
+
+			<exclude name="java.*" />
+			<exclude name="javax.*" />
+			<classespath>
+				<pathelement location="${build.classes.dir}" />
+			</classespath>
+			<classpath refid="classpath" />
+
+		</jdepend>
+
+		<style basedir="${jdepend.output.dir}" destdir="${jdepend.output.dir}" includes="jdepend-report.xml" style="${basedir}/buildscript/jdepend.xsl" />
+	</target>
+
+	<!-- ================================================================== -->
+	<!-- Findbugs report                                                    -->
+	<!-- ================================================================== -->
+	<!--                                                                    -->
+	<!-- ================================================================== -->
+	<target name="findbugs" depends="compile">
+		<mkdir dir="${findbugs.output.dir}" />
+
+		<findbugs home="${findbugs.home}" output="xml:withMessages" outputFile="${findbugs.output.dir}/findbugs.xml" debug="true">
+
+			<auxClasspath path="${lib.dir}" />
+			<class location="${build.classes.dir}/com/anacleto/api" />
+			<class location="${build.classes.dir}/com/anacleto/base" />
+			<class location="${build.classes.dir}/com/anacleto/filters" />
+			<class location="${build.classes.dir}/com/anacleto/hierarchy" />
+			<class location="${build.classes.dir}/com/anacleto/index" />
+			<class location="${build.classes.dir}/com/anacleto/parsing" />
+			<!--
+			<class location="${build.classes.dir}/com/anacleto/query" />
+			<class location="${build.classes.dir}/com/anacleto/sched" />	      		
+			<class location="${build.classes.dir}/com/anacleto/security" />	      		
+				<class location="${build.classes.dir}/com/anacleto/struts" />	      		
+			<class location="${build.classes.dir}/com/anacleto/util" />	      		
+			<class location="${build.classes.dir}/com/anacleto/view" />	      		
+			-->
+			<sourcePath path="${src.dir}" />
+		</findbugs>
+
+		<style basedir="${findbugs.output.dir}" destdir="${findbugs.output.dir}" includes="findbugs.xml" style="${basedir}/buildscript/findbugs.xsl" />
+	</target>
+
+	<!-- ================================================================== -->
+	<!-- Checkstyle report                                                  -->
+	<!-- ================================================================== -->
+	<!--                                                                    -->
+	<!-- ================================================================== -->
+
+	<target name="checkstyle">
+		<checkstyle config="${checkstyle.config}" classpathref="classpath" failOnViolation="false">
+
+			<fileset dir="${src.dir}" />
+			<formatter type="xml" toFile="${report.dir}/checkstyle_report.xml" />
+		</checkstyle>
+		<style in="${report.dir}/checkstyle_report.xml" out="${report.dir}/checkstyle_report.html" style="${checkstyle.xsl}" />
+	</target>
+
+	<!-- ================================================================== -->
+	<!-- Create distribution jar file                                       -->
+	<!-- ================================================================== -->
+	<!--                                                                    -->
+	<!-- ================================================================== -->
+	<tstamp>
+		<format property="current.year" pattern="yyyy" />
+		<format property="DSTAMP" pattern="yyyy-MM-dd" />
+		<format property="TSTAMP" pattern="HH:mm:ss" />
+	</tstamp>
+	<target name="build-jar" depends="compile" description="build the jar file">
+		<jar basedir="${build.classes.dir}" destfile="${build.dir}/anacleto.jar">
+
+			<fileset dir="${src.dir}" includes="**/*.*" excludes="**/*.java" />
+
+			<manifest>
+				<attribute name="Created-By" value="Tesuji s.r.l" />
+				<section name="com.anacleto">
+					<attribute name="Specification-Title" value="Anacleto" />
+					<attribute name="Specification-Version" value="1.0" />
+					<attribute name="Specification-Vendor" value="Tesuji s.r.l" />
+					<attribute name="Implementation-Title" value="Anacleto" />
+					<attribute name="Implementation-Version" value="build ${DSTAMP} ${TSTAMP}" />
+					<attribute name="Implementation-Vemdpr" value="Tesuji s.r.l" />
+				</section>
+			</manifest>
+		</jar>
+	</target>
+
+	<!-- ================================================================== -->
+	<!-- Local exploded deploy                                                       -->
+	<!-- ================================================================== -->
+	<!-- use this for testing                                               -->
+	<!-- ================================================================== -->
+	<target name="deploy_exploded" depends="compile">
+		<copy todir="${deploy.classes.dir}">
+			<fileset dir="${src.dir}" includes="**/*.*" excludes="**/*.java" />
+			<fileset dir="${build.classes.dir}" includes="**/*.class" />
+		</copy>
+	</target>
+
+	<!-- ================================================================== -->
+	<!-- Build administration site                                          -->
+	<!-- ================================================================== -->
+	<!--                                                                    -->
+	<!-- ================================================================== -->
+	<target name="build-war" depends="compile">
+		<war destfile="${build.dir}/anacletoadmin.war" webxml="${web.dir}/WEB-INF/web.xml">
+
+			<fileset dir="${web.dir}" excludes="**/web.xml" />
+
+			<classes dir="${src.dir}">
+				<include name="**/ApplicationResources*.properties" />
+			</classes>
+
+		</war>
+
+	</target>
+
+	<!-- ================================================================== -->
+	<!-- Build zip file with all dependent jars                             -->
+	<!-- ================================================================== -->
+	<!--                                                                    -->
+	<!-- ================================================================== -->
+	<target name="distribution" depends="build-jar, build-war">
+		<zip destfile="${build.dir}/anacleto_dist.zip">
+			<fileset dir="${lib.dir}" />
+			<fileset file="${build.dir}/anacleto*.jar" />
+		</zip>
+	</target>
+
+	<!-- ================================================================== -->
+	<!-- Local deploy                                                       -->
+	<!-- ================================================================== -->
+	<!--                                                                    -->
+	<!-- ================================================================== -->
+	<target name="deploy" depends="compile, build-jar, build-war">
+		<copy file="${build.dir}/anacletoadmin.war" todir="${deploy.dir}" />
+		<copy file="${build.dir}/anacleto.jar" todir="${deploy.lib.dir}" />
+
+		<copy todir="${deploy.lib.dir}">
+			<fileset dir="${lib.dir}" />
+		</copy>
+	</target>
+
+	<!-- ================================================================== -->
+	<!-- Clean                                                              -->
+	<!-- ================================================================== -->
+	<!--                                                                    -->
+	<!-- ================================================================== -->
+	<target name="clean all">
+		<delete dir="${build.dir}" />
+		<antcall target="prepare" />
+	</target>
+
+</project>

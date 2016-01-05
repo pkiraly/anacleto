@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<project>
+  <pomVersion>3</pomVersion>
+  <id>joseki</id>
+  <name>joseki</name>
+  <currentVersion>1.0-SNAPSHOT</currentVersion>
+  <organization>
+    <name>Tesuji Software</name>
+    <url>http://tesuji.org</url>
+  </organization>
+  <inceptionYear>2005</inceptionYear>
+  <package>org.tesuji.joseki</package>
+
+
+  <description>
+    Maven is a project management and project comprehension
+    tool. Maven is based on the concept of a project object
+    model: builds, documentation creation, site publication,
+    and distribution publication are all controlled from the
+    project object model. Maven also provides tools to
+    create source metrics, change logs based directly on
+    source repository, and source cross-references.
+  </description>
+
+  <shortDescription>Java Project Management Tools</shortDescription>
+
+  <url>http://maven.apache.org/</url>
+  <issueTrackingUrl>
+    http://nagoya.apache.org/scarab/servlet/scarab/
+  </issueTrackingUrl>
+  <siteAddress>jakarta.apache.org</siteAddress>
+  <siteDirectory>
+    /www/maven.apache.org/
+  </siteDirectory>
+  <distributionDirectory>
+    /www/jakarta.apache.org/builds/jakarta-turbine-maven/
+  </distributionDirectory>
+
+  <developers>
+
+    <developer>
+      <name>Robert Kiraly</name>
+      <id>rkiraly</id>
+      <email>robert_kiraly@hotmail.com</email>
+      <organization></organization>
+    </developer>
+
+	<developer>
+      <name>Peter Kiraly</name>
+      <id>pkiraly</id>
+      <email>kiru@arcanum.hu</email>
+      <organization></organization>
+    </developer>
+  </developers>
+ 
+  
+  <reports>
+    <report>maven-jdepend-plugin</report>
+    <report>maven-checkstyle-plugin</report>
+    <report>maven-changes-plugin</report>
+    <report>maven-changelog-plugin</report>
+    <report>maven-file-activity-plugin</report>
+    <report>maven-developer-activity-plugin</report>
+    <report>maven-javadoc-plugin</report>
+    <report>maven-jellydoc-plugin</report>
+    <report>maven-jxr-plugin</report>
+    <report>maven-junit-report-plugin</report>
+    <report>maven-tasklist-plugin</report>
+    <report>maven-pmd-plugin</report>
+    <report>maven-simian-plugin</report>
+    <report>maven-faq-plugin</report>
+</reports>
+</project>

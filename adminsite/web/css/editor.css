@@ -1,0 +1,184 @@
+body {
+	font:small arial;
+	font-family: "Trebuchet MS", Verdana, Geneva, Tahoma, Arial, Helvetica, sans-serif;
+	margin: 0;
+}
+
+#actionPanel {
+	display: none;
+	border: 1px solid #666;
+	width: 300px;
+	padding: 5px;
+	background-color: #eee;
+}
+
+#actionPanel h1 {
+  margin: 0;
+  font-size: small;
+}
+
+#basicFormPanel {
+	display: none;
+	border: 1px dotted maroon;
+	width: 300px;
+	background-color: #eee;
+}
+
+form {
+	margin: 0;
+}
+
+label {
+	width: 100px;
+	display: block;
+	float: left;
+	text-align: right;
+}
+
+label.radio {
+	width: auto;
+	float: none;
+	display: inline;
+}
+
+input, select {
+	font: small arial;
+	border: 1px solid #333;
+}
+
+input.radio {
+	border: none;
+}
+
+option.disabled {
+	color: #ccc;
+}
+
+ul {
+	list-style-type: square;
+	margin-left: 10px;
+}
+
+ul li {
+	margin: 0 0 0 10px;
+}
+
+#actionPanel ul {
+	margin: 0 0 0 10px;
+}
+
+#actionPanel ul li {
+	margin: 0 0 0 10px;
+}
+
+#admin {
+	/*
+	width: 100%;
+	background-color: #ccc;
+	border-bottom: 1px solid #333;
+	color: #333;
+	*/
+	margin-top: 20px;
+	text-align: center;
+}
+
+#admin ul {
+	margin: 1px;
+}
+
+#admin ul li {
+	display: inline;
+	border: 1px solid #2d598a; 
+	width: 200px;
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
+#panelCommand {
+	width: 100%;
+	/* background-color: #ccc; */
+	border-bottom: 1px solid #333;
+	color: #333;
+}
+
+#panelCommand span {
+  padding-left: 5px;
+  color: #999;
+}
+
+#panelCommand span.selected {
+  color: black;
+}
+
+#panel_move, #panel_modify {
+  display: none;
+}
+
+#FileSystemContent_form, #WebServerContent_form, #WebDavContent_form, 
+  #NXT3CONTENT_form, #PluginContent_form, 
+  #FTPContent_form, #MailServerContent_form, #SSHContent_form,  /* <-- TODO */
+  #add_special_container, #mod_special_container, #basicValues,
+  #ShelfNode_form, #BookNode_form, 
+  #CronExpressionContainer {
+  display: none;
+}
+
+#fileList {
+  display: none;
+  position: absolute;
+  background-color: #eee;
+  border: 1px solid black;
+  margin: 0;
+}
+
+#fileList ul, #fileList ul li  {
+  margin: 0;
+  padding: 0;
+  text-indent: 0;
+}
+
+#fileList ul li  {
+  list-style: none;
+}
+
+#fileList ul li a {
+  text-decoration: none;
+}
+
+#importXMLlink, #exportXMLlink, #saveAndApplylink {
+  cursor: pointer;
+  cursor: hand;
+}
+
+.cmd_panel {
+  cursor: pointer;
+  cursor: hand;
+}
+
+#exportXml {
+  display: none;
+  width: 300px;
+  background-color: #eee;
+}
+
+div.container {
+  width: 100%;
+  text-align: center;
+}
+
+div.container p, div#add_SEsimple p {
+  margin: 0;
+  font-weight: bold;
+}
+
+div.container label, div.schedTypeSelector label {
+	width: auto; 
+	display: inline;
+}
+
+div.componentContainer {
+  padding: 5px;
+  width: inherit;
+  font-size: 60%;
+  font-family: courier, "courier new", monaco, monospace;
+}

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FlowViewLayout Version="1.2">
+  <StrutsActivity path="/indexStatistics.do" location="-150,315" dimension="315,84" />
+  <StrutsActivity path="/documentIndexView.do" location="-135,120" dimension="349,84" />
+  <StrutsActivity path="/indexMaintenance.do" location="-150,1500" dimension="336,100" />
+  <StrutsActivity path="/configure.do" location="-150,915" dimension="391,91" />
+  <StrutsActivity path="/bookdetails.do" location="-150,720" dimension="391,91" />
+  <StrutsActivity path="/stopWords.do" location="-150,1095" dimension="335,100" />
+  <StrutsActivity path="/logViewer.do" location="-150,510" dimension="391,91" />
+  <StrutsActivity path="/accentConversion.do" location="-165,1290" dimension="373,100" />
+  <StrutsActivity path="/authentication.do" location="-190,1770" dimension="428,104" />
+  <StrutsActivity path="/xmlEdit.do" location="350,550" dimension="268,88" />
+  <StrutsActivity path="/xmlEditListFiles.do" location="1250,550" dimension="305,88" />
+  <StrutsActivity path="/xmlEditOpenXml.do" location="350,750" dimension="310,88" />
+  <StrutsActivity path="/xmlEditSaveXml.do" location="950,750" dimension="308,88" />
+  <StrutsActivity path="/form/indexStatistics.jsp" location="-60,240" dimension="174,52" />
+  <StrutsActivity path="/form/documentIndexView.jsp" location="-90,30" dimension="208,52" />
+  <StrutsActivity path="/form/indexMaintenance.jsp" location="350,250" dimension="164,49" />
+  <StrutsActivity path="/form/configure.jsp" location="650,250" dimension="122,49" />
+  <StrutsActivity path="/form/bookDetails.jsp" location="950,250" dimension="132,49" />
+  <StrutsActivity path="/form/stopWords.jsp" location="1250,250" dimension="129,49" />
+  <StrutsActivity path="/form/logViewer.jsp" location="350,350" dimension="123,49" />
+  <StrutsActivity path="/form/accentConversion.jsp" location="650,350" dimension="163,49" />
+  <StrutsActivity path="/form/authentication.jsp" location="950,350" dimension="146,49" />
+  <StrutsActivity path="/form/xmlEdit.jsp" location="950,550" dimension="111,49" />
+  <StrutsActivity path="/form/xmlEditListFiles.jsp" location="350,950" dimension="148,49" />
+  <StrutsActivity path="/form/xmlEditOpenXml.jsp" location="650,950" dimension="153,49" />
+  <StrutsActivity path="/form/xmlEditSaveXml.jsp" location="950,950" dimension="151,49" />
+  <StrutsActivity path="/form/admin/indexMaintenance.jsp" location="-90,1425" dimension="235,52" />
+  <StrutsActivity path="/form/admin/configure.jsp" location="-150,840" dimension="186,52" />
+  <StrutsActivity path="/form/admin/bookDetails.jsp" location="-150,645" dimension="198,52" />
+  <StrutsActivity path="/form/admin/stopWords.jsp" location="-90,1020" dimension="194,52" />
+  <StrutsActivity path="/form/admin/logViewer.jsp" location="-150,420" dimension="190,52" />
+  <StrutsActivity path="/form/admin/accentConversion.jsp" location="-150,1215" dimension="271,61" />
+  <StrutsActivity path="/form/admin/authentication.jsp" location="-120,1650" dimension="230,53" />
+  <StrutsActivity path="/xmlEditSaveAndApply.do" />
+  <StrutsActivity path="/form/xmlEditSaveAndApply.jsp" />
+  <StrutsTransition id="/form/bookDetails.jsp,null,/bookdetails.do,2" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="0,0" />
+      <AbsolutePoint location="45,765" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/form/authentication.jsp,null,/authentication.do,2" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="0,0" />
+      <AbsolutePoint location="24,1822" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/form/xmlEditOpenXml.jsp,null,/xmlEditOpenXml.do,2" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="726,950" />
+      <AbsolutePoint location="726,794" />
+      <AbsolutePoint location="660,794" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/form/indexStatistics.jsp,null,/indexStatistics.do,2" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="27,292" />
+      <AbsolutePoint location="27,315" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/form/xmlEdit.jsp,null,/xmlEdit.do,2" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="950,574" />
+      <AbsolutePoint location="618,574" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/form/stopWords.jsp,null,/stopWords.do,2" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="0,0" />
+      <AbsolutePoint location="17,1145" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/form/accentConversion.jsp,null,/accentConversion.do,2" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="0,0" />
+      <AbsolutePoint location="21,1340" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/form/xmlEditSaveAndApply.jsp,null,/xmlEditSaveAndApply.do,2" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="0,0" />
+      <AbsolutePoint location="0,0" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/form/documentIndexView.jsp,null,/documentIndexView.do,2" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="14,82" />
+      <AbsolutePoint location="14,120" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/form/configure.jsp,null,/configure.do,2" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="0,0" />
+      <AbsolutePoint location="45,960" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/form/logViewer.jsp,null,/logViewer.do,2" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="0,0" />
+      <AbsolutePoint location="45,555" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/form/xmlEditSaveXml.jsp,null,/xmlEditSaveXml.do,2" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1025,950" />
+      <AbsolutePoint location="1025,838" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/form/xmlEditListFiles.jsp,null,/xmlEditListFiles.do,2" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="424,950" />
+      <AbsolutePoint location="424,855" />
+      <AbsolutePoint location="1402,855" />
+      <AbsolutePoint location="1402,638" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/form/indexMaintenance.jsp,null,/indexMaintenance.do,2" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="0,0" />
+      <AbsolutePoint location="18,1550" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+</FlowViewLayout>
+

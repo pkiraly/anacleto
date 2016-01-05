@@ -1,0 +1,18 @@
+@CHARSET "UTF-8";
+
+tr.NONE td {font-family: arial;}
+tr.INFO td {color: green; font-family: arial;}
+tr.DEBUG td {color: black; font-family: arial;}
+tr.WARNING td {color: yellow; font-family: arial;}
+tr.ERROR td {color: red; font-family: arial;}
+tr.CRITICAL td {color: maroon; font-family: arial;}
+
+table.main tr td {
+	vertical-align: text-top;
+	
+}
+
+div.log {
+  display: none;
+}
+

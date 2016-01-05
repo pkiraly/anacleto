@@ -1,0 +1,143 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.2//EN" "http://struts.apache.org/dtds/struts-config_1_2.dtd">
+<struts-config>
+   <data-sources />
+   <form-beans >
+      <form-bean name="indexMaintenanceForm" type="com.anacleto.struts.form.admin.IndexMaintenanceForm" />
+      <form-bean name="configureForm" type="com.anacleto.struts.form.admin.ConfigureForm" />
+      <form-bean name="bookDetailsForm" type="com.anacleto.struts.form.admin.BookDetailsForm" />
+      <form-bean name="stopWordsForm" type="com.anacleto.struts.form.admin.StopWordsForm" />
+      <form-bean name="logViewerForm" type="com.anacleto.struts.form.admin.LogViewerForm" />
+      <form-bean name="accentConversionForm" type="com.anacleto.struts.form.admin.AccentConversionForm" />
+      <form-bean name="authenticationForm" type="com.anacleto.struts.form.admin.AuthenticationForm" />
+      <form-bean name="indexStatisticsForm" type="com.anacleto.struts.form.admin.IndexStatisticsForm" />
+      <form-bean name="documentIndexViewForm" type="com.anacleto.struts.form.admin.DocumentIndexViewForm" />
+      <form-bean name="xmlEditForm" type="com.anacleto.struts.form.admin.XmlEditForm" />
+      <form-bean name="xmlEditListFilesForm" type="com.anacleto.struts.form.admin.XmlEditListFilesForm" />
+      <form-bean name="xmlEditOpenXmlForm" type="com.anacleto.struts.form.admin.XmlEditOpenXmlForm" />
+      <form-bean name="xmlEditSaveXmlForm" type="com.anacleto.struts.form.admin.XmlEditSaveXmlForm" />
+      <form-bean name="xmlEditSaveAndApplyForm" type="com.anacleto.struts.form.admin.XmlEditSaveAndApplyForm" />
+   </form-beans>
+
+   <global-exceptions />
+   <global-forwards >
+   </global-forwards>
+
+   <action-mappings >
+      <action
+         attribute="indexStatisticsForm"
+         input="/form/indexStatistics.jsp"
+         name="indexStatisticsForm"
+         path="/indexStatistics"
+         scope="request"
+         type="com.anacleto.struts.action.admin.IndexStatisticsAction" />
+
+      <action
+	      attribute="documentIndexViewForm"
+	      input="/form/documentIndexView.jsp"
+	      name="documentIndexViewForm"
+	      path="/documentIndexView"
+	      scope="request"
+	      type="com.anacleto.struts.action.admin.DocumentIndexViewAction" />
+                     
+      <action
+         attribute="indexMaintenanceForm"
+         input="/form/indexMaintenance.jsp"
+         name="indexMaintenanceForm"
+         path="/indexMaintenance"
+         scope="request"
+         type="com.anacleto.struts.action.admin.IndexMaintenanceAction" />
+
+      <action
+         attribute="configureForm"
+         input="/form/configure.jsp"
+         name="configureForm"
+         path="/configure"
+         scope="request"
+         type="com.anacleto.struts.action.admin.ConfigureAction" />
+      
+      <action
+         attribute="bookDetailsForm"
+         input="/form/bookDetails.jsp"
+         name="bookDetailsForm"
+         path="/bookdetails"
+         scope="request"
+         type="com.anacleto.struts.action.admin.BookDetailsAction" />
+
+      <action
+         attribute="stopWordsForm"
+         input="/form/stopWords.jsp"
+         name="stopWordsForm"
+         path="/stopWords"
+         scope="request"
+         type="com.anacleto.struts.action.admin.StopWordsAction" />
+
+      <action
+         attribute="logViewerForm"
+         input="/form/logViewer.jsp"
+         name="logViewerForm"
+         path="/logViewer"
+         scope="request"
+         type="com.anacleto.struts.action.admin.LogViewerAction" />
+
+      <action
+         attribute="accentConversionForm"
+         input="/form/accentConversion.jsp"
+         name="accentConversionForm"
+         path="/accentConversion"
+         scope="request"
+         type="com.anacleto.struts.action.admin.AccentConversionAction" />
+
+      <action
+	      attribute="authenticationForm"
+	      input="/form/authentication.jsp"
+	      name="authenticationForm"
+	      path="/authentication"
+	      scope="request"
+	      type="com.anacleto.struts.action.admin.AuthenticationAction" />
+
+      <action
+	      attribute="xmlEditForm"
+	      input="/form/xmlEdit.jsp"
+	      name="xmlEditForm"
+	      path="/xmlEdit"
+	      scope="request"
+	      type="com.anacleto.struts.action.admin.XmlEditAction" />
+
+      <action
+	      attribute="xmlEditListFilesForm"
+	      input="/form/xmlEditListFiles.jsp"
+	      name="xmlEditListFilesForm"
+	      path="/xmlEditListFiles"
+	      scope="request"
+	      type="com.anacleto.struts.action.admin.XmlEditListFilesAction" />
+
+      <action
+	      attribute="xmlEditOpenXmlForm"
+	      input="/form/xmlEditOpenXml.jsp"
+	      name="xmlEditOpenXmlForm"
+	      path="/xmlEditOpenXml"
+	      scope="request"
+	      type="com.anacleto.struts.action.admin.XmlEditOpenXmlAction" />
+
+      <action
+	      attribute="xmlEditSaveXmlForm"
+	      input="/form/xmlEditSaveXml.jsp"
+	      name="xmlEditSaveXmlForm"
+	      path="/xmlEditSaveXml"
+	      scope="request"
+	      type="com.anacleto.struts.action.admin.XmlEditSaveXmlAction" />
+
+      <action
+	      attribute="xmlEditSaveAndApplyForm"
+	      input="/form/xmlEditSaveAndApply.jsp"
+	      name="xmlEditSaveAndApplyForm"
+	      path="/xmlEditSaveAndApply"
+	      scope="request"
+	      type="com.anacleto.struts.action.admin.XmlEditSaveAndApplyAction" />
+   </action-mappings>
+
+   <message-resources parameter="com.anacleto.struts.ApplicationResources" />
+   
+</struts-config>
+

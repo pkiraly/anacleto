@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml-body>
+	<shelf name="root" title="Anacleto" location="something">
+		<shelf name="fs" title="File System Directory">
+			<book name="fsdir"
+				    title="Files on the local filesystem (/home/robi/java/temp/fstest)"
+					location="/home/robi/java/temp/fstest" 
+					scheduled="false"
+					schedulingCronExpression="0/100 * * * * ?"
+					contentType="FSCONTENT"/>
+		</shelf>
+		
+		<shelf name="wd" title="WebDav Destination">			
+			<book name="webdav"
+				    title="Local WebDav resource (http://localhost:8000/webdav)"
+					location="http://localhost:8080/slide/files" 
+					user="robi"
+					password="robi"
+					scheduled="false"
+					schedulingCronExpression="0/100 * * * * ?"
+					contentType="WEBDAVCONTENT"/>
+		</shelf>
+
+		<shelf name="csa" title="Csaladtortenet" titlepage="titlepages/tp-csaladtortenet.html" encoding="utf-8">
+				<book name="barczay"
+					title="Barczay"
+					location="/home/robi/java/anacleto_dev/csaladtortenet/barczay"
+					contentType="NXT3CONTENT"
+					titlepage="titlepages/f_csaladtortenet/tp-barczay.html"
+					encoding="utf-8"
+			        nxt3Descriptor="barczay.xml" 
+			        nxt3IndexingStyleSheet="html.xsl"/>
+				
+				<book name="fejerpataky"
+					title="fejerpataky"
+					location="/home/robi/java/anacleto_dev/csaladtortenet/fejerpataky"
+					contentType="NXT3CONTENT"
+			        nxt3Descriptor="fejerpataky.xml" 
+			        nxt3IndexingStyleSheet="html.xsl"/>
+
+				<book name="karacsonyi"
+					title="karacsonyi"
+					location="/home/robi/java/anacleto_dev/csaladtortenet/karacsonyi"
+					contentType="NXT3CONTENT"
+			        nxt3Descriptor="karacsonyi.xml" 
+			        nxt3IndexingStyleSheet="html.xsl"/>
+
+				<book name="nagyivan"
+					title="Nagy Ivan"
+					location="/home/robi/java/anacleto_dev/csaladtortenet/nagyivan"
+					contentType="NXT3CONTENT"
+			        nxt3Descriptor="nagyivan.xml" 
+			        nxt3IndexingStyleSheet="html.xsl"/>
+
+		</shelf>
+		<shelf name="konyveszet" title="Konyveszet">
+				<book name="ermk"
+					title="Elektronikus regi magyar konyvtar"
+					location="/home/robi/java/anacleto_dev/konyveszet/ermk"
+					contentType="NXT3CONTENT"
+			        nxt3Descriptor="ermk.xml" 
+			        nxt3IndexingStyleSheet="html.xsl"/>
+
+		</shelf>
+		
+		<shelf name="lexikonok" title="Lexikonok">
+			<book name="pallas"
+			      title="Pallas nagylexikon"
+			      location="/home/robi/java/anacleto_dev/f_lexikonok/pallas"
+			      contentType="NXT3CONTENT"
+			      nxt3Descriptor="pallas.xml" 
+			      nxt3IndexingStyleSheet="html.xsl"/>
+			
+		</shelf>
+		
+		<shelf name="arc" title="History">
+			<shelf name="arc_history" title="Arcanum History">
+				<book name="deak"
+					title="Deak"
+					location="/home/robi/java/anacleto_dev/tortenelem/deak"
+					contentType="NXT3CONTENT"
+			        nxt3Descriptor="deak.xml" 
+			        nxt3IndexingStyleSheet="html.xsl"/>
+
+				<book name="egyet_tort"
+					title="Egyetemes Tortenelem"
+					location="/home/robi/java/anacleto_dev/tortenelem/egyet_tort"
+					contentType="NXT3CONTENT" 
+					nxt3Descriptor="egyet_tort.xml" 
+			            nxt3IndexingStyleSheet="html.xsl"/>
+					
+				<book name="engelarch"
+					title="Engel Pal: Magyarország világi archontológiája. 1301-1457"
+					location="/home/robi/java/anacleto_dev/tortenelem/engelarch"
+					contentType="NXT3CONTENT" 
+					nxt3Descriptor="engelarch.xml" 
+			            nxt3IndexingStyleSheet="html.xsl"/>			
+					
+				<book name="gracza"
+					title="Gracza György: Az 1848–49-iki magyar szabadságharcz története"
+					location="/home/robi/java/anacleto_dev/tortenelem/gracza"
+					contentType="NXT3CONTENT" 
+					nxt3Descriptor="gracza.xml" 
+			            nxt3IndexingStyleSheet="html.xsl"/>
+				
+				<book name="homan"
+					title="Hóman Bálint munkái"
+					location="/home/robi/java/anacleto_dev/tortenelem/homan"
+					contentType="NXT3CONTENT"
+					nxt3Descriptor="homan.xml" 
+			            nxt3IndexingStyleSheet="html.xsl"/>
+					
+				<book name="homan_szekfu"
+					title="Hóman–Szekfű: Magyar történet"
+					location="/home/robi/java/anacleto_dev/tortenelem/homan_szekfu"
+					contentType="NXT3CONTENT" 
+					nxt3Descriptor="homan_szekfu.xml" 
+			            nxt3IndexingStyleSheet="html.xsl"/>
+				
+				<book name="kepekben"
+					title="Az 1848/49-iki magyar szabadságharcz története képekben"
+					location="/home/robi/java/anacleto_dev/tortenelem/kepekben"
+					contentType="NXT3CONTENT" 
+					nxt3Descriptor="kepekben.xml" 
+			            nxt3IndexingStyleSheet="html.xsl"/>
+					
+				<book name="kossuth1"
+					title="Kossuth Lajos összes munkái"
+					location="/home/robi/java/anacleto_dev/tortenelem/kossuth1"
+					contentType="NXT3CONTENT" 
+					nxt3Descriptor="kossuth1.xml" 
+			            nxt3IndexingStyleSheet="html.xsl"/>
+				
+				<book name="kossuth2"
+					title="Kossuth Lajos hírlapírói munkássága"
+					location="/home/robi/java/anacleto_dev/tortenelem/kossuth2"
+					contentType="NXT3CONTENT" 
+					nxt3Descriptor="kossuth2.xml" 
+			            nxt3IndexingStyleSheet="html.xsl"/>
+				
+				<book name="marczali"
+					title="Marczali Henrik (szerk.): Nagy képes világtörténet"
+					location="/home/robi/java/anacleto_dev/tortenelem/marczali"
+					contentType="NXT3CONTENT" 
+					nxt3Descriptor="marczali.xml" 
+			            nxt3IndexingStyleSheet="html.xsl"/>
+
+				
+				<book name="millenaris"
+					title="Magyarország történeti emlékei az 1896. évi Ezredéves Országos Kiállításon"
+					location="/home/robi/java/anacleto_dev/tortenelem/millenaris"
+					contentType="NXT3CONTENT" 
+					nxt3Descriptor="millenaris.xml" 
+			            nxt3IndexingStyleSheet="html.xsl"/>
+								
+				<book name="szalay"
+					title="Szalay József–Baróti Lajos: A magyar nemzet története"
+					location="/home/robi/java/anacleto_dev/tortenelem/szalay" 
+					contentType="NXT3CONTENT"
+					nxt3Descriptor="szalay.xml" 
+			            nxt3IndexingStyleSheet="html.xsl"/>
+
+				<book name="szazadok_en2jl"
+					title="Századok, 1867–1880, 1994–2003"
+					location="/home/robi/java/anacleto_dev/tortenelem/szazadok_en2jl"
+					contentType="NXT3CONTENT" 
+					nxt3Descriptor="szazadok_en2jl.xml" 
+			            nxt3IndexingStyleSheet="html.xsl"/>
+
+				<book name="szilagyi"
+					title="Szilágyi Sándor (szerk.): A magyar nemzet története"
+					location="/home/robi/java/anacleto_dev/tortenelem/szilagyi"
+					contentType="NXT3CONTENT" 
+					nxt3Descriptor="szilagyi.xml" 
+			            nxt3IndexingStyleSheet="html.xsl"/>
+
+					
+				<book name="tort_eletrajzok"
+					title="Magyar történeti életrajzok"
+					location="/home/robi/java/anacleto_dev/tortenelem/tort_eletrajzok"
+					contentType="NXT3CONTENT" 
+					nxt3Descriptor="tort_eletrajzok.xml" 
+			            nxt3IndexingStyleSheet="html.xsl"/>
+
+								
+			</shelf>
+		</shelf>
+
+	</shelf>
+
+</xml-body>
+
