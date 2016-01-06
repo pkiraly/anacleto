@@ -15,7 +15,7 @@ public class GlobalCache {
 	
 	public static final String FastDocumentCache = "fastDocument";
 	
-	public static final String HitCollectorCache = "hitCollectorCache";
+	//public static final String HitCollectorCache = "hitCollectorCache";
 	
 	public static final String FilteredDocTreeCache = "filteredDocTreeCache";
 	
@@ -49,6 +49,7 @@ public class GlobalCache {
 					30);	  //time to idle
 			manager.addCache(hitCollectorCache);
 			*/
+			
 			Cache filteredDocTreeCache = new Cache(
 					GlobalCache.FilteredDocTreeCache, 
 					100,      //MAX size
@@ -57,6 +58,7 @@ public class GlobalCache {
 					900, 	  //time to live
 					300);	  //time to idle
 			manager.addCache(filteredDocTreeCache);
+			
 
 		} catch (CacheException e) {
 			//cahce configuration exception;

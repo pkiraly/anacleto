@@ -30,12 +30,15 @@ public class MimeTypes {
 		}
 		
 		String retName = null;
-		int ext = fileName.lastIndexOf('.');
-		if (ext >= 0 || ext < fileName.length())
-			retName =  (String)extensionMap.get(fileName.substring(ext + 1));
+		int extIdx = fileName.lastIndexOf('.');
+		String ext = "";
+		if (extIdx >= 0 || extIdx < fileName.length()) {
+			ext = fileName.substring(extIdx + 1).toLowerCase();
+			retName =  (String)extensionMap.get(ext);
+		}
 		
 		if (retName == null)
-			indexingLog.warn("No mime found for file: " + fileName);
+			indexingLog.warn("No mime found for file: " + fileName + " (" + ext + ")");
 		
 		return retName;
 	}

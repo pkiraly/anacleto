@@ -22,5 +22,4 @@ public class ContentReadException extends Exception {
 	public ContentReadException(Throwable cause) {
 		super(cause);
 	}
-
 }

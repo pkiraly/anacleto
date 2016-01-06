@@ -23,7 +23,7 @@ public class Shelf extends HierarchicalElement {
 	
 	private Shelf parent;
 	
-    private static Logger log = Logging.getIndexingLogger();
+    private static Logger logger = Logging.getIndexingLogger();
     
     /**
      * @param name
@@ -56,7 +56,7 @@ public class Shelf extends HierarchicalElement {
     }
 
     public Collection getLogicalChildElements(String title) {
-    	log.info("getLogicalChildElements: " + title);
+    	logger.info("getLogicalChildElements: " + title);
     	return childColl;
     }
 
@@ -131,6 +131,4 @@ public class Shelf extends HierarchicalElement {
 			throw new ContentReadException(e);
 		}
 	}
-    
-    
 }

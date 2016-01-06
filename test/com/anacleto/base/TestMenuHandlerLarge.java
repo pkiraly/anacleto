@@ -12,7 +12,7 @@ public class TestMenuHandlerLarge extends TestCase{
 	public void testGetChildrenOfSzalay1() throws Exception{
 		MenuHandler handler = new MenuHandler();
 		String resStr;
-		resStr = handler.getChildElements("root", 0, true, "a");
+		resStr = handler.getChildElements("root", 0, true, "a", "", true);
 		
 		System.out.println(resStr);
 	}

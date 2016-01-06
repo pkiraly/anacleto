@@ -38,7 +38,6 @@ import com.anacleto.hierarchy.BookPage;
  */
 public class IndexManager {
 
-	
     /**
      * The directory in which the index exists
      */
@@ -109,6 +108,11 @@ public class IndexManager {
     }
     
     public static synchronized void destroy(){
+    	try {
+    		searcher.close();
+    	} catch(IOException e) {
+    		e.printStackTrace();
+    	}
     	sort = null;
     }
 
@@ -299,12 +303,12 @@ public class IndexManager {
 			.replaceAll("\\+", "\\\\+")
 			.replaceAll("\\*", "\\\\*")
 			;
-        log.info(logicalParent + ", " + logicalParentPattern);
+        log.debug(logicalParent + ", " + logicalParentPattern);
 
 	    Query q = new TermQuery(new Term("logicalParent", logicalParent));
-	    log.info("findLogicalChildElements: query: " + q.toString());
+	    log.debug("findLogicalChildElements: query: " + q.toString());
 	    Hits hits = searcher.search(q, new Sort("siblingCounter"));
-	    log.info("hits: " + hits.length());
+	    log.debug("hits: " + hits.length());
 	    
 	    int lastSibling = 0;
 	    for (int i = 0; i < hits.length(); i++) {
@@ -347,7 +351,7 @@ public class IndexManager {
         	}
         }
 	    
-	    log.info("/findLogicalChildElements");
+	    log.debug("/findLogicalChildElements");
 	    return retColl;
     }
 
@@ -369,7 +373,7 @@ public class IndexManager {
     public boolean hasChildElements(String name) throws IOException{
         Query query = new TermQuery(new Term("parentName", name));
         Hits hits = searcher.search(query);
-    	// log.info(name + " hasChildElements: " + hits.length());
+    	// log.debug(name + " hasChildElements: " + hits.length());
 
         if (hits.length() > 0)
             return true;
@@ -382,7 +386,7 @@ public class IndexManager {
 
         Query query = new TermQuery(new Term("logicalParent", logicalParent));
         Hits hits = searcher.search(query);
-    	log.info(name + " hasLogicalChildElements: " + hits.length());
+    	log.debug(name + " hasLogicalChildElements: " + hits.length());
 
         if (hits.length() > 0)
             return true;
@@ -390,7 +394,8 @@ public class IndexManager {
         return false;
     }
 
-    public Document executeQuery(String q, int hitNo) throws IOException, ParseException{      
+	public Document executeQuery(String q, int hitNo) 
+			throws IOException, ParseException {
     	Query query = getQuery(q);
         Hits hits = searcher.search(query);
         return hits.doc(hitNo);
@@ -414,14 +419,14 @@ public class IndexManager {
      * @throws ParseException
      */
     public Hits executeQuery(String query) throws IOException, ParseException{
-    	// log.info("executeQuery 1) input: '" + query + "'");
+    	// log.debug("executeQuery 1) input: '" + query + "'");
     	Query q = getQuery(query);
-    	// log.info("executeQuery 2) executed query: '" + q + "'");
+    	// log.debug("executeQuery 2) executed query: '" + q + "'");
     	return searcher.search(q, sort);
     }
     
     public Query getQuery(String query) throws IOException, ParseException{
-    	//log.info("getQuery 1) input: '" + query + "'");
+    	//log.debug("getQuery 1) input: '" + query + "'");
 
     	HashMap pathMap = new HashMap();
     	Pattern path = Pattern.compile("(path:[^ ]+)");
@@ -437,25 +442,24 @@ public class IndexManager {
     	}
     	extractedQuery.append(query.substring(start, query.length()));
     	query = extractedQuery.toString();
-		// log.info("removed query: " + query);
+		// log.debug("removed query: " + query);
         query = analyzer.translateQuery(query);
-    	// log.info("getQuery 2) translated query: '" + query + "'");
+    	// log.debug("getQuery 2) translated query: '" + query + "'");
         Query q = QueryParser.parse(query, defaultQueryField, analyzer);
-    	// log.info("getQuery 3) parsed query: '" + q + "'");
+    	// log.debug("getQuery 3) parsed query: '" + q + "'");
     	
 		if(pathMap.size() == 0) {
 			q = searcher.rewrite(q);
 		} else {
 			q = searcher.rewrite(q, pathMap);
 		}
-    	// log.info("getQuery 4) rewriten query: '" + q + "'");
+    	// log.debug("getQuery 4) rewriten query: '" + q + "'");
         return q;
     }
     
     public String AnalyzeQuery(Query q) {
     	StringBuffer query = new StringBuffer();
-    	
-    	
+
     	return query.toString();
     }
     
@@ -474,13 +478,12 @@ public class IndexManager {
         }
     }
     
-    
-    public void updateSearcher() throws IOException{
-    	if ( indexDir!= null)
-    		IndexManager.searcher = new CachedSearcher( 
-    				new IndexSearcher(indexDir), 
-    				IndexReader.open(indexDir));
-    }
+	public void updateSearcher() throws IOException {
+		if (indexDir != null)
+			IndexManager.searcher = new CachedSearcher(
+					new IndexSearcher(indexDir),
+					IndexReader.open(indexDir));
+	}
     
     /**
      * Returns with the number of indexed documents within a book
@@ -488,20 +491,19 @@ public class IndexManager {
      * @return
      * @throws IOException
      */
-    public HashMap getBookCounters() throws IOException{
-        HashMap retMap = new HashMap();
-        IndexReader reader   = IndexReader.open(indexDir);
-        
-        WildcardTermEnum tes = new WildcardTermEnum(reader, 
-                new Term("book", "*"));
-        
-        while (tes.term()!= null){
-            retMap.put(tes.term().text(), new Integer(tes.docFreq()));
-            tes.next();
-        }        
-        reader.close();
-        return retMap;
-    }
+	public HashMap getBookCounters() throws IOException {
+		HashMap retMap = new HashMap();
+		IndexReader reader = IndexReader.open(indexDir);
+		
+		WildcardTermEnum tes = new WildcardTermEnum(reader,
+				new Term("book", "*"));
+		while (tes.term()!= null){
+			retMap.put(tes.term().text(), new Integer(tes.docFreq()));
+			tes.next();
+		}
+		reader.close();
+		return retMap;
+	}
     
     public Collection getIndexedBooks() throws IOException{
     	Collection retColl = new LinkedList();
@@ -517,6 +519,22 @@ public class IndexManager {
         return retColl;
     }
 
+	public static Directory getIndexDir() {
+		return indexDir;
+	}
+
+	public static void setIndexDir(Directory indexDir) {
+		IndexManager.indexDir = indexDir;
+	}
+	
+	public static void setIndexDir(String indexDir) throws IOException {
+		/*
+		File in = new File(indexDir);
+		if(!in.exists())
+			in.mkdir();
+		*/
+		IndexManager.indexDir = FSDirectory.getDirectory(indexDir, true);
+	}
 
 }
 

@@ -37,7 +37,7 @@ public abstract class HighlightMethods {
 	/**
 	 * The terms to search for
 	 */
-	private HashMap termsToFind;
+	protected HashMap termsToFind;
 
 	protected MultiValueTreeMap queriesByWords;
 

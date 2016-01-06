@@ -1,7 +1,6 @@
 package com.anacleto.content;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -31,7 +30,7 @@ import com.lowagie.text.pdf.RandomAccessFileOrArray;
 
 public class PDFUtils {
 
-	protected static Logger log = Logging.getIndexingLogger();
+	protected static Logger log = Logging.getUserEventsLogger();
 
 	/**
 	 * Extract a page from an existing pdf file to a new file
@@ -63,7 +62,10 @@ public class PDFUtils {
 	 * @throws DocumentException
 	 * @throws IOException
 	 */
-	public static void extractPage(String pdfFileName, int pageno, OutputStream outStream) throws DocumentException, IOException {
+	public static void extractPage(String pdfFileName, int pageno, OutputStream outStream) 
+			throws DocumentException, IOException {
+		
+		log.info("extracting " + pdfFileName + " p. " + pageno);
 
 		PDFReferences refs = new PDFReferences();
 		PdfReader reader;
@@ -71,30 +73,36 @@ public class PDFUtils {
 
 		if (!PDFReferences.checkIndexFile(pdfFileName)){			
 			reader = new PdfReader(ra, new byte[0]);
-			
-			refs.setXref(reader.getXref());
-			refs.setTrailerpos(reader.getTrailerpos());
-			refs.saveIndexInfo(pdfFileName);
+			if (!reader.isNewXrefType()){
+				refs.setXref(reader.getXref());
+				refs.setTrailerpos(reader.getTrailerpos());
+				refs.saveIndexInfo(pdfFileName);
+			}
 		} else {
 			refs.loadIndexInfo(pdfFileName);
-			reader = new PdfReader(ra, new byte[0], refs.getXref(), refs.getTrailerpos());
+			//For new xref types we do not optimize
+			if (refs.getTrailerpos() != 0)
+				reader = new PdfReader(ra, new byte[0], refs.getXref(), refs.getTrailerpos());
+			else
+				reader = new PdfReader(ra, new byte[0]);
 		}
 
-		Document document1 = new Document(reader.getPageSizeWithRotation(1));
-		PdfWriter writer1 = PdfWriter.getInstance(document1, outStream);
-		document1.open();
 
-		PdfContentByte cb1 = writer1.getDirectContent();
-		PdfImportedPage page = writer1.getImportedPage(reader, pageno);
+		Document document = new Document(reader.getPageSizeWithRotation(pageno));
+		PdfWriter writer = PdfWriter.getInstance(document, outStream);
+		document.open();
 
+		PdfContentByte cb = writer.getDirectContent();
+		PdfImportedPage page = writer.getImportedPage(reader, pageno);
+		
 		int rotation = reader.getPageRotation(pageno);
 		if (rotation == 90 || rotation == 270) {
-			cb1.addTemplate(page, 0, -1f, 1f, 0, 0, reader
+			cb.addTemplate(page, 0, -1f, 1f, 0, 0, reader
 					.getPageSizeWithRotation(pageno).getHeight());
 		} else {
-			cb1.addTemplate(page, 1f, 0, 0, 1f, 0, 0);
+			cb.addTemplate(page, 1f, 0, 0, 1f, 0, 0);
 		}
-		document1.close();
+		document.close();
 		reader.close();
 	}
 	
@@ -114,7 +122,7 @@ public class PDFUtils {
 	}
     
 	public static String getPageContent(String pdfFileName, int pageNo)
-	throws IOException 
+			throws IOException 
 	{
 
 		RandomAccessFileOrArray ra = new RandomAccessFileOrArray(
@@ -152,9 +160,26 @@ public class PDFUtils {
 			prevTokenType = tokenizer.getTokenType();
 			prevStringValue = tokenizer.getStringValue();
 		}
+		byte[] latin1 = sb.toString().getBytes("ISO8859-1");
+		String content = new String(latin1, "ISO8859-2");
+		/*
+		log.info("content.length: " + content.length());// + " " + content.substring(0, 100));
+		int i = content.indexOf("Mid");
+		if(i > -1) {
+			String a = content.substring(i, i+5);
+			StringBuffer b = new StringBuffer();
+			for(int j = 0; j<a.length(); j++) {
+				char c = a.charAt(j);
+			}
+			log.info(a + " " + a.replace("\365", "Å‘"));
+		} else {
+			//log.info("not found");
+		}
+		
 		String content = sb.toString()
-					.replaceAll("\\0365", "õ")  // õ=245=\365=\337
-					.replaceAll("\\0373", "û"); // û=251=\373=\369
+					.replaceAll("\\0365", "ï¿½")  // Å‘=245=\365=\337
+					.replaceAll("\\0373", "ï¿½"); // Å±=251=\373=\369
+		*/
 	
 		return content;
 	}
@@ -178,8 +203,8 @@ public class PDFUtils {
 			sb.append(tokenizer.getStringValue() + "\n");
 		}
 		String content = sb.toString()
-						.replaceAll("\\0365", "õ")  // õ=245=\365=\337
-						.replaceAll("\\0373", "û"); // û=251=\373=\369
+						.replaceAll("\\0365", "Å‘")  // Å‘=245=\365=\337
+						.replaceAll("\\0373", "Å±"); // Å±=251=\373=\369
 		
 		return content;
 	}
@@ -187,7 +212,7 @@ public class PDFUtils {
 	public static PdfTocConfig readBookmarkInfo(String pdfFilePath, 
 			String tocFilePath, PdfTocConfig pdfTocConfig) 
 		throws FileNotFoundException, IOException, PdfTocConfigException {
-		
+		log.info("Processing toc file: " + tocFilePath);
 		RandomAccessFileOrArray ra = new RandomAccessFileOrArray(pdfFilePath, false, true);
 		PdfReader reader = new PdfReader(ra, new byte[0]);
 		pdfTocConfig.setNumberOfPages(reader.getNumberOfPages());
@@ -216,10 +241,15 @@ public class PDFUtils {
 				}
 				// if page number is null, page = parent's page number
 				if(pageNumber == null) {
-					String parent = (String)path.lastElement();
-					pageNumber = parent.substring(
+					if(path.size() > 0) {
+						String parent = (String)path.lastElement();
+						pageNumber = parent.substring(
 							pdfTocConfig.getPrefix().length() + pdfTocConfig.getYear().length(), 
 							parent.indexOf(":"));
+					} else {
+						pageNumber = "1";
+						log.info("no pageNumber and parent: " + line);
+					}
 				}
 				PDFBookmarkEntry bookmark = new PDFBookmarkEntry(
 						title, // title 
@@ -254,7 +284,7 @@ public class PDFUtils {
 		long start = System.currentTimeMillis();
 		try {
 			PDFUtils.extractPage("/home/moki/work/arcanum_pdf/content/big.pdf", 100, 
-					"/home/moki/work/arcanum_pdf/content/big_200.pdf");
+					"/home/moki/work/arcanum_pdf/content/100.pdf");
 		} catch (DocumentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -262,8 +292,8 @@ public class PDFUtils {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		long end = System.currentTimeMillis();
-		System.out.println("Duration: " + MilliSecFormatter.toString(end-start));
+		System.out.println("Duration: " 
+				+ MilliSecFormatter.toString(System.currentTimeMillis()-start));
 	}
 }
 	
@@ -295,6 +325,7 @@ class PDFReferences {
 		}
 		fo.flush();
 		fo.close();
+		
 	}
 	
     public static boolean checkIndexFile(String pdfFileName) throws IOException{

@@ -167,7 +167,7 @@ public class CustomAnalyzer extends Analyzer {
 		accentMap = AccentFilter.getDefaultAccentMap();
 	}
 	
-	public synchronized void loadAccents() throws IOException{
+	public synchronized void loadAccents() throws IOException {
 		accentMap.clear();
 		
 		String fileContent = loadFile(accentsFile);

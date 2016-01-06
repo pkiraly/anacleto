@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
+import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.Token;
 import org.apache.lucene.analysis.TokenStream;
@@ -23,6 +24,7 @@ import org.pdfbox.pdmodel.PDDocument;
 import org.pdfbox.util.PDFTextStripper;
 
 import com.anacleto.base.Configuration;
+import com.anacleto.base.Logging;
 import com.anacleto.index.IndexManager;
 
 public class PdfHighlighter extends HighlightMethods{
@@ -31,9 +33,16 @@ public class PdfHighlighter extends HighlightMethods{
 	
 	HighlightFragment lastFrag;
 
+	private static  Logger log = Logging.getUserEventsLogger();
+	
 	public PdfHighlighter(String queryStr) throws IOException, ParseException {
        	IndexManager im = new IndexManager();
+       	
+       	log.debug("Query string to highlight: " + queryStr); 
+    	
     	query = im.getQuery(queryStr);
+    	log.debug("parsedQuery: " + query); 
+    	
     	queriesByWords = new MultiValueTreeMap();
     	
     	//extract terms from the query:
@@ -183,7 +192,7 @@ public class PdfHighlighter extends HighlightMethods{
     
     public static void main(String[] args) throws IOException {
 		Writer w = new StringWriter();
-		PDDocument doc = PDDocument.load("G:\\home\\moki\\work\\arcanum\\content\\1878.pdf");
+		PDDocument doc = PDDocument.load("/home/moki/work/arcanum_pdf/content/1867.pdf");
 		
 		PdfPageExtractor ext = new PdfPageExtractor();
 		ext.extractText(doc, w, 1);

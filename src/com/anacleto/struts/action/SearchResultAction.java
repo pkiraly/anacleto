@@ -56,7 +56,7 @@ public class SearchResultAction extends Action {
             HttpServletRequest request, HttpServletResponse response)
             throws ConfigurationException {
 
-        double startTime = System.currentTimeMillis();
+        long startTime = System.currentTimeMillis();
         SearchResultForm resForm = (SearchResultForm) form;
         
         QueryStats stats = new QueryStats();
@@ -84,11 +84,11 @@ public class SearchResultAction extends Action {
         	log.error(e2);
         }
         
-        double endTime = System.currentTimeMillis();
-        resForm.setSpeed(String.valueOf((endTime - startTime) / 1000));
+        long endTime = System.currentTimeMillis();
+        resForm.setSpeed(String.valueOf(((double)endTime - (double)startTime) / 1000));
         log.info("User Query: " + resForm.getQuery() + ". " +
         		"Duration: " 
-        		+ MilliSecFormatter.toString(((long)endTime - (long)startTime)) 
+        		+ MilliSecFormatter.toString(endTime - startTime) 
         		+ ". " +
         		"Total hits: " + resForm.getFoundResult() + ". " +
         		"Offset: " + resForm.getOffset() + ". " +

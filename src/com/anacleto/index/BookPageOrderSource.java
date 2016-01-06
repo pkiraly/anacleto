@@ -18,6 +18,7 @@ import com.anacleto.base.Configuration;
 import com.anacleto.base.Logging;
 import com.anacleto.hierarchy.Book;
 import com.anacleto.hierarchy.Shelf;
+import com.anacleto.util.MilliSecFormatter;
 
 /**
  * Search result sorting. The results will be sorted primary by the position 
@@ -91,9 +92,9 @@ class BookPageOrderSource implements SortComparatorSource {
 				(rt.totalMemory() - rt.freeMemory()));
 		log.debug("Total document number to order: " + docDist.length);
 		
-		log.info("Ordering system initialized in " + (end-start) + " ms");
-		
-		
+		log.info("Ordering system initialized in " + 
+				MilliSecFormatter.toString(end-start) + " ms");
+
 		return new BookPageOrderComparator(docDist);
 	}
 

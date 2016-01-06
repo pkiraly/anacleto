@@ -61,7 +61,7 @@ public class PathQueryExtractor {
 		while (pathExpr.startsWith("/")) {
 			pathExpr = pathExpr.substring(1);
 		}
-		// log.info("afterWhile: " + pathExpr);
+		log.info("afterWhile: " + pathExpr);
 		
 		String[] elements = pathExpr.split("/");
 		HierarchicalElement parentEl = Configuration.getElement(elements[0]);
@@ -90,7 +90,7 @@ public class PathQueryExtractor {
 					}
 				}
 				pathExpr = newPath.toString();
-				// log.info("pathExpr: " + pathExpr);
+				log.info("pathExpr: " + pathExpr);
 				return new PrefixQuery(new Term("path", pathExpr));
 			}
 		}

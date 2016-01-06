@@ -6,29 +6,38 @@ import com.anacleto.base.Logging;
 import com.anacleto.content.PDFBookmarkEntry;
 import org.apache.log4j.Logger;
 
-public abstract class PdfTocConfig
-{
-    protected Logger log;
-    protected String defaultField;
-    protected String prefix;
-    protected String year;
-    protected Hashtable bookmarkInfo = new Hashtable();
-    protected int numberOfPages;
+public abstract class PdfTocConfig {
+	protected Logger log;
 
-	public PdfTocConfig()
-    {
-        log = Logging.getIndexingLogger();
-        defaultField = "bookmark";
-    }
-    
-    public abstract void setUp(String prefix, String year);
-    
-    public abstract String getFieldName(String as[])
-        throws PdfTocConfigException;
+	protected String defaultField;
 
-    public abstract void addBookmarkEntry(PDFBookmarkEntry bookmark);
+	protected String prefix;
 
-    public abstract void checkAllPages();
+	protected String year;
+
+	protected Hashtable bookmarkInfo = new Hashtable();
+
+	protected int numberOfPages;
+
+	public PdfTocConfig() {
+		log = Logging.getIndexingLogger();
+		defaultField = "bookmark";
+	}
+
+	/**
+	 * set up base fields: prefix and year
+	 * 
+	 * @param prefix
+	 * @param year
+	 */
+	public abstract void setUp(String prefix, String year);
+
+	public abstract String getFieldName(String as[])
+			throws PdfTocConfigException;
+
+	public abstract void addBookmarkEntry(PDFBookmarkEntry bookmark);
+
+	public abstract void checkAllPages();
 
 	public String getPrefix() {
 		return prefix;
@@ -37,12 +46,12 @@ public abstract class PdfTocConfig
 	public String getYear() {
 		return year;
 	}
-	
+
 	public Hashtable getBookmarkInfo() {
 		return bookmarkInfo;
 	}
 
-    public int getNumberOfPages() {
+	public int getNumberOfPages() {
 		return numberOfPages;
 	}
 

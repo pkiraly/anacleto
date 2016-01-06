@@ -1,0 +1,18 @@
+Az elindításhoz a következõk szükségesek:
+
+anacleto.jar
+org/apache/commons/digester/Digester - commons-digester.jar
+org/apache/commons/collections/ArrayStack - commons-collections-3.1.jar
+org/apache/commons/beanutils/DynaProperty - commons-beanutils.jar
+org/apache/log4j/Logger - log4j.jar
+org/quartz/SchedulerException - quartz.jar
+org/apache/commons/configuration/ConfigurationException - commons-configuration-1.1.jar
+org/apache/commons/lang/exception/NestableException - commons-lang-2.0.jar
+org/apache/struts/action/ActionErrors - struts.jar
+org/apache/oro/text/regex/PatternCompiler - jakarta-oro.jar
+org/apache/lucene/analysis/Analyzer - lucene-1.5-rc1-dev.jar
+net/sf/ehcache/CacheException - ehcache-1.1.jar
+
+PDF indexelés
+org/pdfbox/exceptions/InvalidPasswordException - PDFBox-0.7.3.jar
+org/fontbox/afm/AFMParser - FontBox-0.1.0-dev.jar

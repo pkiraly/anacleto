@@ -219,7 +219,7 @@
 					<attribute name="Specification-Vendor" value="Tesuji s.r.l" />
 					<attribute name="Implementation-Title" value="Anacleto" />
 					<attribute name="Implementation-Version" value="build ${DSTAMP} ${TSTAMP}" />
-					<attribute name="Implementation-Vemdpr" value="Tesuji s.r.l" />
+					<attribute name="Implementation-Vendor" value="Tesuji s.r.l" />
 				</section>
 			</manifest>
 		</jar>

@@ -8,13 +8,14 @@ import org.apache.lucene.queryParser.ParseException;
 import org.jboss.util.threadpool.BasicThreadPool;
 import org.jboss.util.threadpool.Task;
 
+import com.anacleto.util.MilliSecFormatter;
+
 import EDU.oswego.cs.dl.util.concurrent.TimeoutException;
 
 public class SearchPool {
 	
 	private static int POOL_MIN_SIZE = 5;
 	private static int POOL_MAX_SIZE = 10;
-	
 	private static int JOB_TIMEOUT_SECS = 5;
 	
 	BasicThreadPool tp = new BasicThreadPool("searchPool");
@@ -23,15 +24,12 @@ public class SearchPool {
 		tp.setMinimumPoolSize(POOL_MIN_SIZE);
 		tp.setMaximumPoolSize(POOL_MAX_SIZE);
 		//tp.setBlockingMode(BlockingMode.WAIT);
-		
 	}
-	
 	
 	public void shutdown(){
 		tp.stop(false);
 	}
 	
-
 	public void executeQuery(String query, int offset, int length,
 			QueryStats stats, List queryResults) throws IOException,
 			ParseException {
@@ -41,21 +39,21 @@ public class SearchPool {
 				stats, queryResults,
 				JOB_TIMEOUT_SECS);
 		tp.runTask(task);
-		System.out.println("Poolsize:" + tp.getPoolSize());
+		System.out.println("Poolsize: " + tp.getPoolSize());
 		
 		Task task2 = new SearchTask(query, offset, length,
 				stats, queryResults,
 				JOB_TIMEOUT_SECS);
 
 		tp.runTask(task2);
-		System.out.println("Poolsize:" + tp.getPoolSize());
+		System.out.println("Poolsize: " + tp.getPoolSize());
 
 		Task task3  = new SearchTask(query, offset, length,
 				stats, queryResults,
 				JOB_TIMEOUT_SECS);
 
 		tp.runTask(task3);
-		System.out.println("Poolsize:" + tp.getPoolSize());
+		System.out.println("Poolsize: " + tp.getPoolSize());
 		
 		Task task4  = new SearchTask(query, offset, length,
 				stats, queryResults,
@@ -69,15 +67,14 @@ public class SearchPool {
 				JOB_TIMEOUT_SECS);
 
 		tp.runTask(task5);
-		System.out.println("Poolsize:" + tp.getPoolSize());
+		System.out.println("Poolsize: " + tp.getPoolSize());
 		
 		Task task6  = new SearchTask(query, offset, length,
 				stats, queryResults,
 				JOB_TIMEOUT_SECS);
 
 		tp.runTask(task6);
-		System.out.println("Poolsize:" + tp.getPoolSize());
-
+		System.out.println("Poolsize: " + tp.getPoolSize());
 	}
 	
 	public static void main(String[] args) {
@@ -96,7 +93,7 @@ public class SearchPool {
 	}
 }
 
-class  SearchTask implements Task{
+class SearchTask implements Task {
 
 	private long accepedAt;
 	private int timeout;
@@ -123,14 +120,12 @@ class  SearchTask implements Task{
 	public void accepted(long arg0) {
 		accepedAt = System.currentTimeMillis();
 		System.out.println("Accepted at:" + accepedAt);
-		
 	}
 
 	public void completed(long arg0, Throwable t) {
 		System.out.println("Completed at:" + 
-				(System.currentTimeMillis() - accepedAt)
+				MilliSecFormatter.toString(System.currentTimeMillis() - accepedAt)
 				+ t.getMessage());
-		
 	}
 
 	public void execute() {
@@ -141,7 +136,6 @@ class  SearchTask implements Task{
 		} catch (ParseException e) {
 			this.e = e;
 		}
-		
 	}
 
 	public long getCompletionTimeout() {
@@ -164,12 +158,10 @@ class  SearchTask implements Task{
 	public void rejected(long time, Throwable t) {
 		System.out.println("Rejected:" + time + 
 				"::" +  t.getLocalizedMessage());
-		
 	}
 
 	public void started(long arg0) {
 		System.out.println("Started at: " + arg0);
-		
 	}
 
 	public void stop() {
@@ -181,11 +173,10 @@ class  SearchTask implements Task{
 	public SearchTask() {
 		super();
 	}
-	
 }
+
 class  TestTask implements Runnable{
 
-	
 	protected void finalize() throws Throwable {
 		super.finalize();
 		System.out.println("finalize");

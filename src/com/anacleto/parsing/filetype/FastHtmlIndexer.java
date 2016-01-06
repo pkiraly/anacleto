@@ -89,7 +89,7 @@ final class NodeHandler extends SAXHandlerWithStack {
 	 *      java.lang.String)
 	 */
 	public void startElement(SAXHandlerNode node) {
-
+		// logger.info(node.getLocalName());
 	}
 	
 	public void endElement(SAXHandlerNode node) {
@@ -126,7 +126,7 @@ final class NodeHandler extends SAXHandlerWithStack {
 	 * attributes and content of the node
 	 * @param node - the node contains all the requested information
 	 */
-	private void registerNode(SAXHandlerNode node){
+	private void registerNode(SAXHandlerNode node) {
 		
 		StringBuffer fieldValue = node.getValue();
 	    //Empty content is filtered out:
@@ -154,6 +154,8 @@ final class NodeHandler extends SAXHandlerWithStack {
 	    getBooleanAttribute(atts, "stored", isStored);
 	    getBooleanAttribute(atts, "tokenized", isTokenized);
 	    getBooleanAttribute(atts, "termVectorStored", isTermVectorStored);
+	    
+	    //logger.info("adding " + fieldName + ": " + fieldValue.toString());
 	
 	    page.addField(fieldName, fieldValue.toString(), 
 	    		isIndexed, isStored, isTokenized, isTermVectorStored);

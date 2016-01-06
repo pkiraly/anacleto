@@ -27,7 +27,6 @@ public class BaseParameters {
 	//all are authenticated 
 	public static final int fullSecurity = 2;
 	
-	
 	//base parameters:
     private String  indexDir;
     private String 	configDir;
@@ -52,15 +51,19 @@ public class BaseParameters {
     private String  defaultXmlDisplayScheme;
     
     private int     sortType = Constants.SORT_BY_RELEVANCE;
+
     /**
      * Maximum number of toc entries to display when a node is opened
      */
     private int     maxTocEntryNumber = 50;
     
-   
+    /**
+     * Load termlist on startup? true = yes, false = load termlist at the first usage
+     */
+    private boolean loadTermlistOnStartup = false; 
+    
     private LoggingParameters logParams = new LoggingParameters();
     
-
     /**
      * Read configuration parameters from the properties file 
      * @param fileName
@@ -109,8 +112,10 @@ public class BaseParameters {
 					"anacleto.defaultHtmlIndexingscheme");
 			defaultTei2IndexingStyleSheet  = (String) props.getProperty(
 					"anacleto.defaultTei2IndexingStyleSheet");
-			defaultXmlDisplayScheme  = (String) props.getProperty(
+			defaultXmlDisplayScheme = (String) props.getProperty(
 					"anacleto.defaultXmlDisplayScheme");
+			loadTermlistOnStartup = Boolean.valueOf(
+					(String)props.getProperty("anacleto.loadTermlistOnStartup"));
 
 			try {
 				int s = Integer.parseInt(
@@ -170,38 +175,31 @@ public class BaseParameters {
 			
 			props.setProperty("anacleto.ConfigDir", configDir);
 			props.setProperty("anacleto.IndexDir",  indexDir);
-						
 			props.setProperty("anacleto.BooksFile", booksFile);
-			
 			props.setProperty("anacleto.Locale", locale);
-			
 			props.setProperty("anacleto.indexingPriority", 
 					String.valueOf(indexingPriority));
-			
 			props.setProperty("anacleto.securityLevel",
 					String.valueOf(securityLevel));
-			
 			props.setProperty("anacleto.defaultContentStyleSheet",
 					defaultContentStyleSheet );
 			props.setProperty("anacleto.defaultHtmlIndexingscheme",
 					defaultHtmlIndexingscheme);
-			
 			props.setProperty("anacleto.defaultTei2IndexingStyleSheet",
 					defaultTei2IndexingStyleSheet);
-	
 			props.setProperty("anacleto.defaultXmlDisplayScheme",
 					defaultXmlDisplayScheme);
-			
 			props.setProperty("anacleto.sort",
 					String.valueOf(sortType));
-			
 			props.setProperty("anacleto.maxTocEntryNumber", 
 					String.valueOf(maxTocEntryNumber));
+			props.setProperty("anacleto.loadTermlistOnStartup", 
+					String.valueOf(loadTermlistOnStartup));
 			
 			//Save log parameters:
 			props.setProperty("anacleto.logDir", logParams.getLogDir());
-    
-		    props.setProperty("anacleto.AdminLogFile",
+
+			props.setProperty("anacleto.AdminLogFile",
 		    			logParams.getAdminFile());
 		    props.setProperty("anacleto.AdminLogLevel",
 		    			logParams.getAdminLogLevel());
@@ -457,7 +455,12 @@ public class BaseParameters {
 	public void setSortType(int sortType) {
 		this.sortType = sortType;
 	}
-	
-	
-	
+
+	public boolean isLoadTermlistOnStartup() {
+		return loadTermlistOnStartup;
+	}
+
+	public void setLoadTermlistOnStartup(boolean loadTermlistOnStartup) {
+		this.loadTermlistOnStartup = loadTermlistOnStartup;
+	}
 }

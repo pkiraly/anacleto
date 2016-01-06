@@ -39,8 +39,6 @@ import com.anacleto.util.MilliSecFormatter;
  */
 public class ShowDocumentMetaAction extends Action {
 
-    protected static final int BUFFER_SIZE = 256;
- 
     // --------------------------------------------------------- Instance
     // Variables
     
@@ -64,7 +62,8 @@ public class ShowDocumentMetaAction extends Action {
     	
         long start = System.currentTimeMillis();
         ShowDocumentMetaForm sDForm = (ShowDocumentMetaForm) form;
-
+    	logger.info("request " + sDForm.getName() + " " + request.getHeader("Referer"));
+    	
         try {
             HierarchicalElement currEl = Configuration.getElement(sDForm.getName());
 
@@ -84,6 +83,7 @@ public class ShowDocumentMetaAction extends Action {
         	//Process Query related page commands:
             if (sDForm.getQuery() != null
                     && !sDForm.getQuery().trim().equals("")) {
+                logger.info("Process Query start@" + MilliSecFormatter.toString(System.currentTimeMillis()-start));
                 IndexManager im = new IndexManager();
                 Hits hits = im.executeQuery(sDForm.getQuery());
                 
@@ -126,6 +126,7 @@ public class ShowDocumentMetaAction extends Action {
                 if (hits.length() == sDForm.getHitNo() + 1)
                     sDForm.setAtLast(true);
             }
+            logger.info("Process Query@" + MilliSecFormatter.toString(System.currentTimeMillis()-start));
 
             while (currEl.isFirstChildContent()) {
                 Collection coll = currEl.getChildElements();
@@ -138,6 +139,7 @@ public class ShowDocumentMetaAction extends Action {
                 	break;
                 }
             }
+            logger.info("Process isFirstChildContent@" + MilliSecFormatter.toString(System.currentTimeMillis()-start));
 
             sDForm.setName(currEl.getName());
             if (currEl instanceof BookPage) {
@@ -148,14 +150,17 @@ public class ShowDocumentMetaAction extends Action {
 				Book el = (Book)currEl;
             	sDForm.setBook(el.getBookName());
 			}
+            logger.info("Process setBook@" + MilliSecFormatter.toString(System.currentTimeMillis()-start));
             
             sDForm.setContentType(currEl.getContentType());
+            logger.info("Process setContentType@" + MilliSecFormatter.toString(System.currentTimeMillis()-start));
             
             sDForm.setLinkedPath(
             	Configuration.getElementLinkedPath(sDForm.getName())
                 + " " 
                 + currEl.getTitle()
             );
+            logger.info("Process setLinkedPath@" + MilliSecFormatter.toString(System.currentTimeMillis()-start));
 
         } catch (IOException e) {
             //Content was not found
@@ -166,10 +171,9 @@ public class ShowDocumentMetaAction extends Action {
         		" Error: " + e);
 		}
 
-        logger.info("Document meta served: " + sDForm.getName() + "." +
-       		" Duration: " + MilliSecFormatter.toString(
-       				(long)(System.currentTimeMillis() - start)) + "." +
-       		" Query: " + sDForm.getQuery());
+        logger.info("Document meta served: " + sDForm.getName() + "."
+        	+ " Duration: " + MilliSecFormatter.toString(System.currentTimeMillis()-start) + "."
+       		+ " Query: " + sDForm.getQuery());
         
         return mapping.getInputForward();
     }

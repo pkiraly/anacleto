@@ -155,10 +155,10 @@ public class ShowContentAction extends Action {
         	logger.error(e);
 		}
 
-        logger.info("Document served: "+sDForm.getName()+ 
-        		". Duration: " + MilliSecFormatter.toString(
-        				(long)(System.currentTimeMillis() - start))+
-				". Query: " + sDForm.getQuery());
+        logger.info("Document served: "+sDForm.getName()
+        		+ ". Duration: " + MilliSecFormatter.toString(
+        				System.currentTimeMillis() - start)
+        		+ ". Query: " + sDForm.getQuery());
         
         return mapping.getInputForward();
     }

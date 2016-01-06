@@ -205,5 +205,4 @@ public class IndexMaintenanceAction extends Action {
         }
         return missingBookColl;
     }
-
 }

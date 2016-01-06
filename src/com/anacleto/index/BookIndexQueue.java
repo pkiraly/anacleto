@@ -103,11 +103,13 @@ public final class BookIndexQueue extends Thread{
 					try {
 						BookIndexQueue.currentlyIndexing = true;
 						BookIndexQueue.currentlyIndexingBook = bookToIndex;
+						log.info("bookToIndex: " + bookToIndex);
 						indexBook(bookToIndex);
 						
 					} catch (JobExecutionException e1) {
 						log.error(e1);
 					} catch (Exception e2){
+						e2.printStackTrace();
 						log.error(e2);
 					} finally{
 						BookIndexQueue.currentlyIndexing = false;

@@ -100,20 +100,15 @@ public class CachedSearcher extends Searcher {
 	 * @see org.apache.lucene.search.Searchable#rewrite(org.apache.lucene.search.Query)
 	 */
 	public Query rewrite(Query query) throws IOException {
-//		check the cache:
-		// log.info("rewrite1 query: " + query.toString());
+		//check the cache:
 		Query q = (Query)rewriteCache.get(query);
 		
 		if (q == null){
 			q = rewriteQueries(query);
-			// log.info("after rewriteQueries: " + q.toString());
-		
-			// q = searcher.rewrite(q);
-			// log.info("after searcher.rewrite: " + q.toString());
+			q = searcher.rewrite(q);
 			rewriteCache.put(query, q);
 			return q;
 		} else {
-			// log.info("after rewriteCache: " + q.toString());
 			return q;
 		}
 	}

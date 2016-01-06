@@ -80,10 +80,10 @@ public class MenuHandler {
 		LinkedList QNames = new LinkedList();
 		boolean hasQuery = false;
 		
-		log.info("start");
+		//log.info("start");
 		if (filterQuery == null || filterQuery.trim().equals("")){
 			//get all childs without queryFilter
-			log.info("filterQuery == null");
+			//log.info("filterQuery == null");
 			Iterator it = null;
 			if(isSyncronized == false &&
 			   parentEl.getContentType() != null && 
@@ -95,9 +95,9 @@ public class MenuHandler {
 				 */
 				Collection childs = null;
 				try {
-					log.info("->getLogicalChildElements parentEl: " + parentEl.getClass().getName());
+					//log.info("->getLogicalChildElements parentEl: " + parentEl.getClass().getName());
 					childs = parentEl.getLogicalChildElements(title);
-				log.info("//getLogicalChildElements");
+					// log.info("//getLogicalChildElements");
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -123,7 +123,7 @@ public class MenuHandler {
 	            counter++;
 	        	TreeElement childTree = new TreeElement();
 				childTree.self = (HierarchicalElement)it.next();
-				log.info("child#" + counter + ") " + childTree.self.getName());
+				//log.info("child#" + counter + ") " + childTree.self.getName());
 		    	
 	        	if (counter < startEl){
 	                continue;
@@ -139,12 +139,12 @@ public class MenuHandler {
 	        	}
 				parent.children.add(childTree);
 	        }
-	        log.info("QNames.size: " + QNames.size());
+	        //log.info("QNames.size: " + QNames.size());
 			QNames = newQNames;
-	        log.info("QNames.size: " + QNames.size());
+	        //log.info("QNames.size: " + QNames.size());
 			
 		} else {
-	        log.info("get filtered children");
+			//log.info("get filtered children");
 			//get filtered children
 			hasQuery = true;
 			parent = getTreeFromQuery(parent, filterQuery);
@@ -155,7 +155,7 @@ public class MenuHandler {
 	        while (it.hasNext()) {
 	            counter++;
 	        	TreeElement el = (TreeElement)it.next();
-				log.info("child#" + counter + ") " + el.self.getName());
+	        	//log.info("child#" + counter + ") " + el.self.getName());
 
 	        	if (counter < startEl) {
 	                continue;
@@ -183,10 +183,12 @@ public class MenuHandler {
 	private String getPDFMenuDescforTreeElement(TreeElement parentTree, 
 			String filterQuery, String title, LinkedList QNames){
 
+		/*
 		log.info("getPDFMenuDescforTreeElement: " 
 				+ parentTree.self.getName() + ", "
 				+ title + ", "
 				+ QNames);
+		*/
 		StringBuffer retStr = new StringBuffer();
 		if (parentTree.self == null)
 			return "";
@@ -294,7 +296,7 @@ public class MenuHandler {
 			log.info("get title field value: " + title);
 		}
 		
-		log.info("['" + name + "','" + title + "'");
+		//log.info("['" + name + "','" + title + "'");
 		retStr.append("['" + name + "','" + title + "'");
 
 		//Child elements are present when it has children or
@@ -369,7 +371,7 @@ public class MenuHandler {
 	 */
 	private TreeElement getTreeFromQuery(TreeElement parent, String query ) 
 				throws IOException, ParseException {
-		log.info("query: " + query);
+		// log.info("query: " + query);
 		
         if( query == null || query.trim().length() == 0 )
             return null;

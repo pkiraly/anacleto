@@ -90,12 +90,12 @@ public class PdfPerPageParser {
 				if (!pageTable.containsKey(IPageNr)) {
 					log.debug("WARNING: Missing page number at: " + i);
 					childPage = new Hashtable();
-					// childPage.put("origPageNr", "számozatlan");
-					childPage.put("partTitle", "számozatlan oldalak");
+					// childPage.put("origPageNr", "szamozatlan");
+					childPage.put("partTitle", "szï¿½mozatlan oldalak");
 					pageTable.put(IPageNr, childPage);
 				}
 				
-				// betesszük a title elemet, hogy lehessen keresni
+				// betesszuk a title elemet, hogy lehessen keresni
 				childPage = (Hashtable)pageTable.get(IPageNr);
 				
 				if(childPage == null) {
@@ -104,7 +104,7 @@ public class PdfPerPageParser {
 				/*
 				String origPageNr = (String) childPage.get("origPageNr");
 				if(origPageNr == null) {
-					childPage.put("origPageNr", "számozatlan");
+					childPage.put("origPageNr", "szï¿½mozatlan");
 				}
 				*/
 				
@@ -158,7 +158,7 @@ public class PdfPerPageParser {
 
 				String title = clean(item.getTitle());
 				if(pageNr == -1 && parentName.trim().length() > 0){
-					log.error("PDF hiba: 0-ás oldalszám: '" + title + "', '" + parentName + "', '" + path + "'");
+					log.error("PDF hiba: 0-ï¿½s oldalszï¿½m: '" + title + "', '" + parentName + "', '" + path + "'");
 				}
 				
 				String fieldName = "";
@@ -166,9 +166,9 @@ public class PdfPerPageParser {
 					if(year.indexOf("i") > -1) {
 						fieldName = "iromanyszam";
 					} else {
-						if(path.indexOf("Oldalszámok") > -1) {
+						if(path.indexOf("Oldalszï¿½mok") > -1) {
 							fieldName = "origPageNr";
-						} else if(path.indexOf("Ülésnapok") > -1) {
+						} else if(path.indexOf("ï¿½lï¿½snapok") > -1) {
 							fieldName = "ulesnap";
 						} else {
 							log.info("unmatched path: " + path + '/' + title);
@@ -177,12 +177,12 @@ public class PdfPerPageParser {
 					}
 				}
 				else if(prefix.equals("szazadok")) {
-					if(path.indexOf("ÉVES TARTALOMJEGYZÉK") > -1 ||
-					   path.indexOf("ÉVES TARTALOMJEGYZÉÍK") > -1)
+					if(path.indexOf("ï¿½VES TARTALOMJEGYZï¿½K") > -1 ||
+					   path.indexOf("ï¿½VES TARTALOMJEGYZï¿½ï¿½K") > -1)
 					{
 						fieldName = "title";
 					} else {
-						Pattern pattern = Pattern.compile(":[0-9]+\\. szám");
+						Pattern pattern = Pattern.compile(":[0-9]+\\. szï¿½m");
 						Matcher matcher = pattern.matcher(path);
 						if(matcher.find()) {
 							fieldName = "origPageNr";
@@ -224,7 +224,7 @@ public class PdfPerPageParser {
 					}
 					l.add(title);
 					
-					// századok sajátosság!!!!
+					// szï¿½zadok sajï¿½tossï¿½g!!!!
 					if(prefix.equals("szazadok")) {
 						String[] pathComponents = path.split("/");
 						if(pathComponents.length >= 4) {

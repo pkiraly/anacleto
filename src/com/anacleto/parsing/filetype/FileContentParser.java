@@ -18,6 +18,11 @@ import com.anacleto.parsing.UnhandledMimeTypeException;
  * 
  */
 public class FileContentParser {
+	
+	/**
+	 * Flag to index metadata of file
+	 */
+	private boolean indexMetadata = true;
 
     public void processContentType(File file, BookPage page)
             throws FileNotFoundException, ParserException,
@@ -69,7 +74,9 @@ public class FileContentParser {
                 parser.processStream(bis, page);
 
             } else if (mime.equals(MimeTypes.getAliasMime("application/pdf"))) {
-                FileTypeParser parser = new PdfParser();
+            	PdfParser parser = new PdfParser();
+                if(!indexMetadata)
+                	parser.setIndexMetadata(false);
                 parser.processStream(is, page);
 
             } else if (mime.equals(MimeTypes.getAliasMime("text/html"))) {
@@ -111,4 +118,11 @@ public class FileContentParser {
         return mem;
     }
 
+	public boolean isIndexMetadata() {
+		return indexMetadata;
+	}
+
+	public void setIndexMetadata(boolean indexMetadata) {
+		this.indexMetadata = indexMetadata;
+	}
 }

@@ -142,7 +142,6 @@ public class AccentFilter extends TokenFilter {
 			if (rep != null)
 				sb.replace(i, i + 1, rep);
 		}
-
 		return sb.toString();
 	}
 }

@@ -18,7 +18,6 @@ import com.anacleto.base.Configuration;
 import com.anacleto.base.Logging;
 import com.anacleto.view.UserBean;
 
-
 /*
  * Store active users.
  * Used to know if a user already logged in from an other ip
@@ -63,10 +62,13 @@ public class IPBasedAuthenticator extends SimpleSecurityRealmBase{
 		String remoteAddr) throws LoginException{
 		try {
 			validateUser(username, password.toCharArray());
+			logger.info("Successful login. User: '" + username 
+					+ "' from: '" + remoteAddr + "'");
 		} catch (LoginException e) {
 			loginError = LoginErrorUSER;
-			logger.warn("Unsuccessful login. User:" + username + " from:" + remoteAddr
-					+ "root cause:" + e );			
+			logger.warn("Unsuccessful login. User: '" + username 
+					+ "' from: '" + remoteAddr
+					+ "'. Root cause: " + e );
 			throw e;
 		}
 		clearInactive();
@@ -80,8 +82,9 @@ public class IPBasedAuthenticator extends SimpleSecurityRealmBase{
 		if (sessionInfo != null){
 			//has an active session: check remote addresses
 			if (!sessionInfo.remoteAddr.equals(remoteAddr)){
-				logger.warn("User:" + username + " tried to log in from:" + remoteAddr + 
-						" while logged in from:" + sessionInfo.remoteAddr);
+				logger.warn("User:" + username 
+						+ " tried to log in from: " + remoteAddr 
+						+ " while logged in from:" + sessionInfo.remoteAddr);
 				loginError = LoginErrorIP;
 				throw new LoginException("User already logged in from an other address");
 			}
@@ -90,7 +93,6 @@ public class IPBasedAuthenticator extends SimpleSecurityRealmBase{
 					System.currentTimeMillis() + sessionTimeout * 1000);
 			activePrincipals.put(username, newSessionInfo);
 		}
-		
 	}
 
 	/**
@@ -113,8 +115,10 @@ public class IPBasedAuthenticator extends SimpleSecurityRealmBase{
 		while (it.hasNext()) {
 			String username = (String) it.next();
 			SessionInfo session = (SessionInfo)activePrincipals.get(username);
-			if (session.sessionTimeoutAt < now)
+			if (session.sessionTimeoutAt < now) {
 				principalsToRemove.add(username);
+				logger.info("User: " + username + " timeout");
+			}
 		}
 		
 		Iterator it2 = principalsToRemove.iterator();
@@ -187,8 +191,6 @@ public class IPBasedAuthenticator extends SimpleSecurityRealmBase{
 	public void setLoginError(String loginError) {
 		this.loginError = loginError;
 	}	
-	
-	
 }
 
 final class SessionInfo {
@@ -200,5 +202,3 @@ final class SessionInfo {
 		sessionTimeoutAt = at;
 	}
 }
-
-

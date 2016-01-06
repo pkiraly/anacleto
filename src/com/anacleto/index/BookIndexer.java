@@ -52,7 +52,6 @@ public class BookIndexer {
 	    log.info("Scheduled indexing finished for collection: '" 
 	    		+ book.getName()+ "' Duration: " + 
 	    		MilliSecFormatter.toString(
-	    			(long)(System.currentTimeMillis()-start)));
+	    			System.currentTimeMillis()-start));
 	}
-	
 }

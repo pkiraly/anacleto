@@ -11,7 +11,6 @@ import com.anacleto.parsing.ParserException;
 
 /**
  * @author robi
- * 
  */
 public interface FileTypeParser {
 

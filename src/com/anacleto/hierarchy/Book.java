@@ -36,6 +36,12 @@ public class Book extends BookPage {
     private String	 arg2;
     private String	 arg3;
     private String	 arg4;
+    private String	 arg5;
+    private String	 arg6;
+    private String	 arg7;
+    private String	 arg8;
+    private String	 arg9;
+    private String	 arg10;
     
     private File	 tei2IndexingStyleSheet;
     
@@ -359,6 +365,89 @@ public class Book extends BookPage {
 	public void setArg4(String arg4) {
 		this.arg4 = arg4;
 	}
+
+	/**
+	 * @return the arg5
+	 */
+	public String getArg5() {
+		return arg5;
+	}
+
+	/**
+	 * @param arg5 the arg5 to set
+	 */
+	public void setArg5(String arg5) {
+		this.arg5 = arg5;
+	}
+
+	/**
+	 * @return the arg6
+	 */
+	public String getArg6() {
+		return arg6;
+	}
+
+	/**
+	 * @param arg6 the arg6 to set
+	 */
+	public void setArg6(String arg6) {
+		this.arg6 = arg6;
+	}
+
+	/**
+	 * @return the arg7
+	 */
+	public String getArg7() {
+		return arg7;
+	}
+
+	/**
+	 * @param arg7 the arg7 to set
+	 */
+	public void setArg7(String arg7) {
+		this.arg7 = arg7;
+	}
+
+	/**
+	 * @return the arg8
+	 */
+	public String getArg8() {
+		return arg8;
+	}
+
+	/**
+	 * @param arg8 the arg8 to set
+	 */
+	public void setArg8(String arg8) {
+		this.arg8 = arg8;
+	}
+
+	/**
+	 * @return the arg9
+	 */
+	public String getArg9() {
+		return arg9;
+	}
+
+	/**
+	 * @param arg9 the arg9 to set
+	 */
+	public void setArg9(String arg9) {
+		this.arg9 = arg9;
+	}
 	
-	
+	/**
+	 * @return the arg10
+	 */
+	public String getArg10() {
+		return arg10;
+	}
+
+	/**
+	 * @param arg10 the arg10 to set
+	 */
+	public void setArg10(String arg10) {
+		this.arg10 = arg10;
+	}
+
 }

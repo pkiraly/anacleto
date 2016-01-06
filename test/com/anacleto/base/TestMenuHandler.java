@@ -7,7 +7,7 @@ public class TestMenuHandler extends SzalayTestCase{
 	public void testGetChildrenOfRoot() throws Exception{
 		MenuHandler handler = new MenuHandler();
 		String resStr;
-		resStr = handler.getChildElements("root", 0, true, "");
+		resStr = handler.getChildElements("root", 0, true, "", "", true);
 		
 		System.out.println(resStr);
 	}
@@ -15,7 +15,7 @@ public class TestMenuHandler extends SzalayTestCase{
 	public void testGetChildrenOfSzalay() throws Exception{
 		MenuHandler handler = new MenuHandler();
 		String resStr;
-		resStr = handler.getChildElements("szalay", 0, true, "");
+		resStr = handler.getChildElements("szalay", 0, true, "", "", true);
 		
 		System.out.println(resStr);
 	}
@@ -23,7 +23,7 @@ public class TestMenuHandler extends SzalayTestCase{
 	public void testGetChildrenOfSzalay1() throws Exception{
 		MenuHandler handler = new MenuHandler();
 		String resStr;
-		resStr = handler.getChildElements("szalay1", 0, true, "kossuth");
+		resStr = handler.getChildElements("szalay1", 0, true, "kossuth", "", true);
 		
 		System.out.println(resStr);
 	}
@@ -31,7 +31,7 @@ public class TestMenuHandler extends SzalayTestCase{
 	public void testGetChildrenOfRootWithQueryAz() throws Exception{
 		MenuHandler handler = new MenuHandler();
 		String resStr;
-		resStr = handler.getChildElements("root", 0, true, "az");
+		resStr = handler.getChildElements("root", 0, true, "az", "", true);
 	
 		System.out.println(resStr);
 	}
@@ -39,7 +39,7 @@ public class TestMenuHandler extends SzalayTestCase{
 	public void testGetChildrenOfRootWithQueryTanul() throws Exception{
 		MenuHandler handler = new MenuHandler();
 		String resStr;
-		resStr = handler.getChildElements("root", 0, true, "tanuló");
+		resStr = handler.getChildElements("root", 0, true, "tanuló", "", true);
 	
 		System.out.println(resStr);
 	}
@@ -47,7 +47,7 @@ public class TestMenuHandler extends SzalayTestCase{
 	public void testGetChildrenOfPallasWithQueryTanul() throws Exception{
 		MenuHandler handler = new MenuHandler();
 		String resStr;
-		resStr = handler.getChildElements("pallas", 0, true, "tanuló");
+		resStr = handler.getChildElements("pallas", 0, true, "tanuló", "", true);
 	
 		System.out.println(resStr);
 	}
@@ -55,7 +55,7 @@ public class TestMenuHandler extends SzalayTestCase{
 	public void testGetChildrenOfPallas29620WithQueryTanul() throws Exception{
 		MenuHandler handler = new MenuHandler();
 		String resStr;
-		resStr = handler.getChildElements("pallas29620", 0, true, "tanuló");
+		resStr = handler.getChildElements("pallas29620", 0, true, "tanuló", "", true);
 	
 		System.out.println(resStr);
 	}

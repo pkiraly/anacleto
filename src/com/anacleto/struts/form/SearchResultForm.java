@@ -98,13 +98,11 @@ public class SearchResultForm extends ActionForm {
      * @param request
      */
     public void reset(ActionMapping mapping, HttpServletRequest request) {
-/*
     	try {
 			request.setCharacterEncoding("utf-8");
 		} catch(UnsupportedEncodingException e) {
 			;
 		}
-*/
     }
 
     /**

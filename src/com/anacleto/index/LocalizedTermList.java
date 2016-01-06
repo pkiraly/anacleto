@@ -4,14 +4,24 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.text.CollationKey;
 import java.text.Collator;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Locale;
+import java.util.SortedSet;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.index.TermEnum;
 
+import com.anacleto.base.Configuration;
 import com.anacleto.base.Constants;
 import com.anacleto.base.Logging;
+import com.anacleto.util.MilliSecFormatter;
 
 /**
  * Localized Term List: 
@@ -20,13 +30,13 @@ import com.anacleto.base.Logging;
  * @author robi
  *
  */
-public class LocalizedTermList{
+public class LocalizedTermList {
 	
 	private static org.apache.log4j.Logger logger = Logging.getAdminLogger();
 	
 	private static final int MAX_TERM_LENGTH = 3; 
 	
-	private static Collator primColl;
+	private static boolean INITIALIZED = false;
 	
 	private static TreeMap  fieldMap;
 	
@@ -37,21 +47,23 @@ public class LocalizedTermList{
 	 * @throws IOException 
 	 * @throws IOException
 	 */
-	synchronized public static void initialize(String indexDir, Locale loc) 
-			throws IOException {
+	synchronized public static void initialize() throws IOException {
+		
+		String indexDir = Configuration.params.getIndexDir(); 
+		Locale loc = Configuration.params.getLocale();
 		
 		IndexReader reader = IndexReader.open(indexDir);
-		
-		Collator co = null;
+		Collator primColl;
 		if (loc == null)
-			co = Collator.getInstance();
+			primColl = Collator.getInstance();
 		else
-			co = Collator.getInstance(loc);
+			primColl = Collator.getInstance(loc);
 		
-		primColl = Collator.getInstance(loc);
 		primColl.setStrength(Collator.PRIMARY);
 
-		ShortTerm.initialize(MAX_TERM_LENGTH, co);
+		LocalizedTermList.INITIALIZED = true;
+		
+		ShortTerm.initialize(MAX_TERM_LENGTH, primColl);
 		
 		long start = System.currentTimeMillis();
 		
@@ -67,7 +79,7 @@ public class LocalizedTermList{
 
 			SortedSet fieldTermSet = (SortedSet)fieldMap.get(currTerm.field());
         	if (fieldTermSet == null) {
-				fieldTermSet = new TreeSet();//new TermOrderComparator());
+				fieldTermSet = new TreeSet();
 				fieldMap.put(currTerm.field(), fieldTermSet);
 			}
         	
@@ -86,32 +98,42 @@ public class LocalizedTermList{
 		}
 				
 		logger.info("Localized termlist initialized with " + counter 
-				+ " terms in " + (System.currentTimeMillis()-start) + "ms.");
+				+ " terms in " + 
+				MilliSecFormatter.toString(System.currentTimeMillis()-start) 
+				+ " ms.");
 	}
 	
 	/**
 	 * Get short terms around the term in input 
 	 * @param field - the field containing the pattern 
 	 * @param pattern - the pattern to serach for
+	 * @throws IOException 
 	 */
 	synchronized public static Collection getTermsNear(String field, 
-			String pattern){
+			String pattern) throws IOException{
+		
+		if (!LocalizedTermList.INITIALIZED)
+			LocalizedTermList.initialize();
 		
 		Object[] fieldTermSet = (Object[])fieldMap.get(field);
     	if (fieldTermSet == null) 
     		return null;
     	
     	ShortTerm inTerm = new ShortTerm(pattern);
-    	int currPos = Arrays.binarySearch(fieldTermSet, inTerm);
+    	int currPos = Arrays.binarySearch(fieldTermSet, inTerm, 
+    								new ShortTermComparator());
     	if (currPos < 0) {
     		currPos = Math.abs(currPos) - 1;
     	}
     	
-		return getEqualTerms(primColl, fieldTermSet, currPos);
+		return getEqualTerms(fieldTermSet, currPos);
 	}
 
 	synchronized public static Collection getTermsAfter(String field, 
-			String text){
+			String text) throws IOException {
+		
+		if (!LocalizedTermList.INITIALIZED)
+			LocalizedTermList.initialize();
 		
 		Object[] fieldTermSet = (Object[])fieldMap.get(field);
     	if (fieldTermSet == null) 
@@ -119,45 +141,57 @@ public class LocalizedTermList{
 		
     	ShortTerm inTerm = new ShortTerm(text);
 		
-    	int currPos = Arrays.binarySearch(fieldTermSet, inTerm);
-    	if (currPos < 0)
-    		currPos = Math.abs(currPos);
-    	
-		//get the first not equal position:
-		while (true){
-			if (fieldTermSet.length <= currPos
-				|| inTerm.compareTo(primColl, fieldTermSet[currPos]) != 0)
-				break;
-			currPos++;
-		}
-		
-		return getEqualTerms(primColl, fieldTermSet, currPos);
-	}
-
-	synchronized public static Collection getTermsBefore(String field, 
-			String text){
-		
-		Object[] fieldTermSet = (Object[])fieldMap.get(field);
-    	if (fieldTermSet == null) 
-    		return null;
-		
-    	ShortTerm inTerm = new ShortTerm(text);
-		
-    	int currPos = Arrays.binarySearch(fieldTermSet, inTerm);
+    	int currPos = Arrays.binarySearch(fieldTermSet, inTerm,
+    						new ShortTermComparator());
     	if (currPos < 0)
     		currPos = Math.abs(currPos) - 1;
     	
 		//get the first not equal position:
-		while (true){
-			if (currPos <= 0)
-				return null;
-			
+		while (fieldTermSet.length > currPos){
+			if (inTerm.comparePrimary((ShortTerm)fieldTermSet[currPos]) != 0)
+				break;
+			currPos++;
+		}
+		
+		return getEqualTerms(fieldTermSet, currPos);
+	}
+
+	/**
+	 * Get a list of term patterns before a certain text in alphabetic order
+	 * example: for "elf" should return "ele, elé, éle" etc..
+	 * @param field
+	 * @param text
+	 * @return
+	 * @throws IOException
+	 */
+	synchronized public static Collection getTermsBefore(String field, 
+			String text) throws IOException{
+		
+		if (!LocalizedTermList.INITIALIZED)
+			LocalizedTermList.initialize();
+		
+		Object[] fieldTermSet = (Object[])fieldMap.get(field);
+    	if (fieldTermSet == null) 
+    		return null;
+		
+    	ShortTerm inTerm = new ShortTerm(text);
+		
+    	int currPos = Arrays.binarySearch(fieldTermSet, inTerm,
+    						new ShortTermComparator());
+    	if (currPos < 0)
+    		currPos = Math.abs(currPos) - 1;
+    	
+    	if (currPos <= 0)
+			return null;
+    	
+		//get the first not equal position:
+		while (currPos > 0){
 			currPos--;
-			if (inTerm.compareTo(primColl, fieldTermSet[currPos]) != 0)
+			if (inTerm.comparePrimary((ShortTerm)fieldTermSet[currPos]) != 0)
 				break;
 		}
 		
-		return getEqualTerms(primColl, fieldTermSet, currPos);
+		return getEqualTerms(fieldTermSet, currPos);
 	}
 
 	/**
@@ -168,10 +202,8 @@ public class LocalizedTermList{
 	 * @param currPos
 	 * @return
 	 */
-	private static Collection getEqualTerms(
-			Collator co,
-			Object[] fieldTermSet, 
-			int currPos)
+	private static Collection getEqualTerms( Object[] fieldTermSet, 
+													 int currPos)
 	{
 		Collection retColl = new LinkedList();
 		if(fieldTermSet.length <= currPos) {
@@ -180,21 +212,15 @@ public class LocalizedTermList{
 		ShortTerm inTerm = (ShortTerm)fieldTermSet[currPos];
 		
 		//get equal terms before the cursor
-		while (true){
-			if (currPos <= 0)
-				break;
-			
-			if (inTerm.compareTo(co, fieldTermSet[currPos-1]) != 0)
+		while (currPos > 0){
+			if (inTerm.comparePrimary((ShortTerm)fieldTermSet[currPos-1]) != 0)
 				break;
 			currPos--;
 		}
 		
 		//get equal terms after the cursor
-		while (true){
-			if(fieldTermSet.length <= currPos) {
-				break;
-			}
-			if (inTerm.compareTo(co, fieldTermSet[currPos]) != 0) {
+		while (fieldTermSet.length > currPos){
+			if (inTerm.comparePrimary((ShortTerm)fieldTermSet[currPos]) != 0) {
 				break;
 			} else {
 				ShortTerm st = (ShortTerm)fieldTermSet[currPos];
@@ -226,41 +252,56 @@ class ShortTerm implements Comparable, Serializable{
 	private static final long serialVersionUID = 6549119625714339701L;
 	
 	private static int MAX_TERM_LENGTH = 0; 
+	
+	
+	//Primary collator, to define equality at the first level:
+	//like ele = elé, 
 	private static Collator co;
 	
+	//Secondary collator, to define equality on the second level:
+	//like ele <> elé but ele = Ele
+	private static Collator co_secondary;
+	
 	private String termChars;
-	private CollationKey key;
+	
+	private CollationKey key_primary;
+	private CollationKey key_secondary;
+	
 	private int    termLength;
 	
 	static void initialize(int maxTermLength, Collator co){
 		MAX_TERM_LENGTH = maxTermLength;
-		ShortTerm.co = co;
+		
+		ShortTerm.co = (Collator)co.clone();
+		ShortTerm.co.setStrength(Collator.PRIMARY);
+		
+		ShortTerm.co_secondary = (Collator)co.clone();
+		ShortTerm.co_secondary.setStrength(Collator.SECONDARY);
+		
 	}
 	
 	ShortTerm(String termText){
 		
-		//termChars = new Character[MAX_TERM_LENGTH];
 		termLength = Math.min(termText.length(), MAX_TERM_LENGTH);
-		/*
-		try{
-			for (int i = 0; i < MAX_TERM_LENGTH; i++) {
-				termChars[i] = new Character(termText.charAt(i));
-			}
-		}catch (IndexOutOfBoundsException e){
-		}
-		*/
 		termChars = termText.substring(0, termLength);
 		
-		key = co.getCollationKey(termChars.toString());
+		key_primary = co.getCollationKey(termChars.toString());
+		key_secondary = co_secondary.getCollationKey(termChars.toString());
 	}
 
 	/**
 	 * @return Returns the key.
 	 */
 	public CollationKey getKey() {
-		return key;
+		return key_primary;
 	}
 
+	/**
+	 * @return Returns the key.
+	 */
+	public CollationKey getSecondaryKey() {
+		return key_secondary;
+	}
 	/**
 	 * @return Returns the termChars.
 	 */
@@ -275,17 +316,27 @@ class ShortTerm implements Comparable, Serializable{
 		return termLength;
 	}
 
+	/**
+	 * Base Comparator, considers the secondary differences:
+	 * like ele < elé but ele = Ele
+	 * this comparator will be used when elements will be put 
+	 * into a set
+	 * 
+	 * @see java.util.Comparable#compareTo(Object)
+	 */
 	public int compareTo(Object o) {
 		ShortTerm otherTerm = (ShortTerm)o;
+		return key_secondary.compareTo(otherTerm.getSecondaryKey());
 		
-		return key.compareTo(otherTerm.getKey());
 	}
 
-	public int compareTo(Collator co, Object o) {
-		String currTermStr = termChars.toString();
-		ShortTerm otherTerm = (ShortTerm)o;
-		String otherTermStr = (otherTerm.getTermChars()).toString();
-		return co.compare(currTermStr, otherTermStr);
+	/**
+	 * Primary Comparator, considers the primary differences:
+	 * like ele = elé , ele = Ele, but ele < eld
+	 * @see java.util.Comparator#compare(Object, Object)
+	 */
+	public int comparePrimary(ShortTerm o) {
+		return key_primary.compareTo(o.getKey());
 	}
 
 	/* (non-Javadoc)
@@ -294,8 +345,18 @@ class ShortTerm implements Comparable, Serializable{
 	public boolean equals(Object target) {
 		ShortTerm otherTerm = (ShortTerm)target;
 		
-		return termChars == otherTerm.getTermChars();
+		return termChars.equals(otherTerm.getTermChars());
 	}
 
+}
 
+
+class ShortTermComparator implements Comparator{
+
+	public int compare(Object arg0, Object arg1) {
+		ShortTerm st1 = (ShortTerm)arg0;
+		ShortTerm st2 = (ShortTerm)arg1;
+		return st1.comparePrimary(st2);
+	}
+	
 }

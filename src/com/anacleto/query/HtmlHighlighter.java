@@ -6,10 +6,13 @@ package com.anacleto.query;
 
 import java.util.HashMap;
 
+import org.apache.lucene.index.Term;
 import org.apache.lucene.search.Query;
+import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.highlight.QueryTermExtractor;
 import org.apache.lucene.search.highlight.WeightedTerm;
 
+import com.anacleto.base.Configuration;
 import com.anacleto.query.highlight.HighlightMethods;
 
 /**
@@ -18,7 +21,7 @@ import com.anacleto.query.highlight.HighlightMethods;
 public class HtmlHighlighter extends HighlightMethods{
 
 	
-	private HashMap termsToFind;
+	//private HashMap termsToFind;
 
 //    private TokenQueue foundPositions = new TokenQueue(100);
     

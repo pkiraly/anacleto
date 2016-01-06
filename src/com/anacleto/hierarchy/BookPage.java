@@ -147,9 +147,7 @@ public class BookPage extends HierarchicalElement implements Serializable {
     				fields.add(currField);
     			}
     		}
-    		
 		}
-        
     }
 
     public boolean validate() throws IndexEntityException{
@@ -559,6 +557,7 @@ public class BookPage extends HierarchicalElement implements Serializable {
 			throw new ContentReadException(e);
 		}
 		
+		log.info("Location: " + this.getLocation());
 		ContentBean cb = sh.getContent(this);
 		if (cb == null)
 			return null;
@@ -581,6 +580,4 @@ public class BookPage extends HierarchicalElement implements Serializable {
 		
 		return null;
 	}
-	
-
 }

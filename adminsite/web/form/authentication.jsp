@@ -1,9 +1,8 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"%>
-<%@ taglib uri="http://jakarta.apache.org/struts/tags-bean"	prefix="bean"%>
-<%@ taglib uri="http://jakarta.apache.org/struts/tags-html"	prefix="html"%>
-<%@ taglib uri="http://jakarta.apache.org/struts/tags-logic" prefix="logic"%>
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+%><%@ taglib uri="http://jakarta.apache.org/struts/tags-bean"	prefix="bean"
+%><%@ taglib uri="http://jakarta.apache.org/struts/tags-html"	prefix="html"
+%><%@ taglib uri="http://jakarta.apache.org/struts/tags-logic" prefix="logic"
+%><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
@@ -11,13 +10,12 @@
   <link rel="stylesheet" type="text/css" href="css/mainstyle.css">
   <script language="JavaScript" src="js/select.js" type="text/javascript"></script>
 </head>
-
 <body>
+
 <table cellspacing="0" cellpadding="5" border="0" width="100%">
   <tr>
     <td class="header2"><bean:message key="auth.title" /></td>
   </tr>
-  <tr></tr>
 </table>
 <br>
 
@@ -45,11 +43,11 @@
 					<html:hidden property="newUser.user"/>
 					<html:text styleClass="header2" property="newUser.user" 
 						disabled="true"/>
-			</logic:equal>
+				</logic:equal>
 			</td>	
 		</tr>
-		<logic:equal name="authenticationForm" property="pageStatusIsInsert" value="false">
-			<tr>
+	<logic:equal name="authenticationForm" property="pageStatusIsInsert" value="false">
+		<tr>
 			<td><bean:message key="auth.enabled" /></td>
 			<td>
 				<html:select property="newUser.enabled" styleClass="header2" >
@@ -57,8 +55,8 @@
 					<html:option styleClass="header2" value="false"/>
 				</html:select>
 			</td>
-			</tr>
-		</logic:equal>		
+		</tr>
+	</logic:equal>		
 		<tr>
 			<td><bean:message key="auth.realName" /></td>
 			<td><html:text styleClass="header2" property="newUser.realName" /></td>
@@ -75,8 +73,8 @@
 			</td>
 		</tr>
 
-		<logic:equal name="authenticationForm" property="pageStatusIsInsert" value="false">
-			<tr>
+	<logic:equal name="authenticationForm" property="pageStatusIsInsert" value="false">
+		<tr>
 			<td><bean:message key="auth.ipFilter" /></td>
 			<td>
 				<html:select property="newUser.ipFilterEnabled" styleClass="header2" >
@@ -84,8 +82,8 @@
 					<html:option styleClass="header2" value="false"/>
 				</html:select>
 			</td>
-			</tr>
-		</logic:equal>		
+		</tr>
+	</logic:equal>		
 		
 		<tr>
 			<td><bean:message key="auth.userType"/></td>
@@ -96,28 +94,28 @@
 				</html:select>
 			</td>
 		</tr>
-			<logic:equal name="authenticationForm" property="pageStatusIsInsert" value="true">
-				<tr>
-					<td><bean:message key="auth.addnew" /></td>
-					<td><html:image property="addNewButt" titleKey="auth.addnew"
+	<logic:equal name="authenticationForm" property="pageStatusIsInsert" value="true">
+		<tr>
+			<td><bean:message key="auth.addnew" /></td>
+			<td><html:image property="addNewButt" titleKey="auth.addnew"
 						src="icons/e_forward.gif" /></td>
-				</tr>
-			</logic:equal>
-			<logic:equal name="authenticationForm" property="pageStatusIsInsert" value="false">
-				<tr>
-				<td><bean:message key="auth.modify" /></td>
-				<td><html:image property="modifyButt" titleKey="auth.modify" 
+		</tr>
+	</logic:equal>
+	<logic:equal name="authenticationForm" property="pageStatusIsInsert" value="false">
+		<tr>
+			<td><bean:message key="auth.modify" /></td>
+			<td><html:image property="modifyButt" titleKey="auth.modify" 
 					src="icons/e_forward.gif" /></td>
-				</tr>
-				<tr>
-				<td><bean:message key="auth.delete" /></td>
-				<td><html:image property="deleteButt" titleKey="auth.delete" 
-					src="icons/e_forward.gif" /></td>
-				</tr>
-			</logic:equal>
+		</tr>
+		<tr>
+			<td><bean:message key="auth.delete" /></td>
+			<td><html:image property="deleteButt" titleKey="auth.delete" 
+				src="icons/e_forward.gif" /></td>
+		</tr>
+	</logic:equal>
 	</table>
 </html:form>
-<!--	    Add new User      -->
+<!--	    /Add new User      -->
 
 <br>
 <!---------------Admin Users--------------->
@@ -133,22 +131,23 @@
 		<td align="center"><bean:message key="auth.password" /></td>
 		<td align="center"><bean:message key="auth.ipFilter" /></td>
 	</tr>
-	<logic:iterate id="adminUser" name="authenticationForm"	property="adminUsers">
-		<tr>
-			<td><html:link action="/authentication" paramId="modifyUser"
-					paramName="adminUser" paramProperty="user">
-				<bean:write name="adminUser" property="user" />
-				</html:link>
-			</td>
-			<td align="center"><html:checkbox name="adminUser" 
+<logic:iterate id="adminUser" name="authenticationForm"	property="adminUsers">
+	<tr valign="top">
+		<td><html:link action="/authentication" paramId="modifyUser"
+				paramName="adminUser" paramProperty="user">
+			<bean:write name="adminUser" property="user" />
+			</html:link>
+		</td>
+		<td align="center"><html:checkbox name="adminUser" 
 					property="enabled" disabled="true"/></td>
-			<td><bean:write name="adminUser" property="realName"/></td>
-			<td><bean:write name="adminUser" property="email"/></td>
-			<td><bean:write name="adminUser" property="password"/></td>
-			<td align="center"><html:checkbox name="adminUser" 
-					property="ipFilterEnabled" disabled="true"/></td>
-		</tr>
-	</logic:iterate>
+		<td><bean:write name="adminUser" property="realName"/></td>
+		<td><bean:write name="adminUser" property="email"/></td>
+		<td><!-- bean:write name="adminUser" property="password" / --></td>
+		<td align="center"><html:checkbox name="adminUser" 
+			property="ipFilterEnabled" disabled="true"/></td>
+	</tr>
+</logic:iterate>
+
 <!---------------Empty line--------------->
 	<tr>
 		<td colspan="6" align="center">&nbsp;</td>
@@ -166,26 +165,23 @@
 		<td align="center"><bean:message key="auth.password" /></td>
 		<td align="center"><bean:message key="auth.ipFilter" /></td>
 	</tr>
-	<logic:iterate id="normalUser" name="authenticationForm"
-		property="normalUsers">
-		<tr>
-		<tr>
-			<td><html:link action="/authentication" paramId="modifyUser"
+<logic:iterate id="normalUser" name="authenticationForm" property="normalUsers">
+	<tr valign="top">
+		<td><html:link action="/authentication" paramId="modifyUser"
 					paramName="normalUser" paramProperty="user">
 				<bean:write name="normalUser" property="user" />
-				</html:link>
-			</td>
-			<td align="center"><html:checkbox name="normalUser" 
+			</html:link>
+		</td>
+		<td align="center"><html:checkbox name="normalUser" 
 				property="enabled" disabled="true"/></td>
-			<td><bean:write name="normalUser" property="realName"/></td>
-			<td><bean:write name="normalUser" property="email"/></td>
-			<td><bean:write name="normalUser" property="password"/></td>
-			<td align="center"><html:checkbox  name="normalUser" 
+		<td><bean:write name="normalUser" property="realName"/></td>
+		<td><bean:write name="normalUser" property="email"/></td>
+		<td><!-- bean:write name="normalUser" property="password"/ --></td>
+		<td align="center"><html:checkbox  name="normalUser" 
 				property="ipFilterEnabled" disabled="true"/></td>
-		</tr>
-	</logic:iterate>
+	</tr>
+</logic:iterate>
 </table>
-
 
 </body>
 </html>

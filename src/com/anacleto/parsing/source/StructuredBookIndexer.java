@@ -35,10 +35,8 @@ public class StructuredBookIndexer extends SourceTypeHandler {
     /**
      * @throws IOException
      * @throws SAXException
-     *  
      */
     private Document doc;
-    
      
     private Logger         log  = Logging.getIndexingLogger();
     
@@ -58,9 +56,20 @@ public class StructuredBookIndexer extends SourceTypeHandler {
 		try {
 			bookURL = page.getBook().getURL();
 			
-			String pageUrl = bookURL + "/" + page.getLocation();
+			String pageUrl;
+			File f = new File(page.getLocation());
+			log.info(page.getLocation() + "- " + f.getAbsoluteFile());
+			if(f.exists()) {
+				log.info("exists");
+				pageUrl = page.getLocation();
+			} else {
+				log.info("doesn't exist");
+				pageUrl = bookURL + "/" + page.getLocation();
+			}
+	        log.info("pageUrl: " + pageUrl);
 	        LocalContentReader reader = new LocalContentReader();
 	        String content = reader.readContent(pageUrl, page.getEncoding());
+	        log.info("content: " + content.substring(0, 100) + "...");
 	        
 	        content = replaceNXT3Links(content, page);
 	        
@@ -135,13 +144,11 @@ public class StructuredBookIndexer extends SourceTypeHandler {
 				log.error(e2);
 			}
 		}
-        
-        
     }
     
     private void indexBook(IndexManager im, Book book)  throws BookException {
     	
-    	log.info("Parsing book descriptor...");
+    	log.info("Parsing book descriptor..." + book.getURL() + " " + book.getNxt3Descriptor());
     	
     	File bookDir = new File(book.getURL());
         //check bookDir
@@ -176,6 +183,7 @@ public class StructuredBookIndexer extends SourceTypeHandler {
         doc = prsr.getDocument();
         
         Node rootNode = doc.getFirstChild();
+        log.info("root: " + rootNode.getLocalName());
  
         try {
         	log.info("Indexing pages...");
@@ -192,12 +200,15 @@ public class StructuredBookIndexer extends SourceTypeHandler {
 
     private void indexNode(IndexManager im, Book book, Node currNode, 
     		String parentNodeName) {
+    	log.info("Indexing node: " + currNode.getNodeName());
 
         int childCount = 0;
         while (currNode != null) {
         	String lastDocName = parentNodeName;
         	if (currNode.getNodeName().equals("document")) {
-        		lastDocName = processDocumentNode( im, book, 
+        		NamedNodeMap attr = currNode.getAttributes();
+        		log.info("document id: " + attr.getNamedItem("id") + " (" + attr.getNamedItem("location") + ")");
+        		lastDocName = processDocumentNode(im, book, 
         				parentNodeName, currNode, childCount);
         		childCount++;
             }
@@ -218,7 +229,6 @@ public class StructuredBookIndexer extends SourceTypeHandler {
 	    NamedNodeMap attribs = currNode.getAttributes();
 	    if (attribs == null)
 	    	return null;
-	    
 	    
 	    BookPage page = new BookPage();
         page.setName(getNodeAttrubute(attribs, "id"));
@@ -253,14 +263,13 @@ public class StructuredBookIndexer extends SourceTypeHandler {
         	location = "";
         
         //convert absolute to relative:
-        String pattern = "\\"+book.getName()+"\\";
+        String pattern = "\\" + book.getName() + "\\";
         int patternStart = location.indexOf(pattern);
         if (patternStart<0)
         	page.setLocation(location);
         else
         	page.setLocation(location.substring(
         			patternStart+pattern.length()));
-        
         
         if (getNodeAttrubute(attribs, "encoding") != null)
         		page.setEncoding(getNodeAttrubute(
@@ -275,34 +284,41 @@ public class StructuredBookIndexer extends SourceTypeHandler {
         
         String fileType = getNodeAttrubute(attribs, "content-type");
     	if (fileType != null &&
-    			fileType.equals("application/x-html-body-text"))
+    			fileType.equals("application/x-html-body-text")) 
     		getContent(im, book, indexer, page);
 	    
     	try {
+    		//im.openBatchWriter();
+    		//im.addPage(page);
         	im.addPageInBatch(page);
+        	//im.closeBatchWriter();
+        	//im.addPageInBatch(page);
          } catch (IOException e) {
          	log.error("Error during adding document to index. Root cause: " +e);
         }
          
         return page.getName();
-        
-	    
 	}
+
     private void getContent(IndexManager im, Book book, 
     		FileTypeParser indexer, BookPage page) {
         
+    	log.info("processing content of " + page.getLocation());
         if (!page.isFirstChildContent()) {
         
             if (page.getLocation() == null  && page.getLocation().trim().equals("")) {
-                log.error("Missing location element - Name: "+page.getName());
+                log.error("Missing location element - Name: " + page.getName());
                 return;
             }
  
             //from the tile we calculate the path:           
             try {
-            	InputStream content = new FileInputStream(
-            			new File(book.getURL()).getCanonicalPath() + "/" 
-                        + page.getLocation());
+            	//File file = new File(book.getURL()).getCanonicalPath() + "/" 
+                //+ page.getLocation()
+            	File contentFile = new File(book.getURL(), page.getLocation());
+            	log.info(contentFile.getAbsolutePath() 
+            			+ " " + contentFile.getCanonicalPath());
+            	InputStream content = new FileInputStream(contentFile);
             	
                 //indexer.getDocumentStructure(page, content.toString() );
                 indexer.processStream(content, page);

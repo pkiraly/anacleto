@@ -145,16 +145,13 @@ public class Configuration {
 	public void startUp() {
 		ClassLoader cloader = getClass().getClassLoader();
 		
-//		 Init logging.
-		
+		// Init logging
 		InputStream logProps = cloader.getResourceAsStream(
 				"com/anacleto/base/log4j.properties");
 		Logging.initLogging(params.getLogParams(), logProps);
 		
-		
 		// Init authentication
 		authController.init(Configuration.params.getPasswordFileAbs());
-		
 		
 		// Start index queue:
 		bookIndexQueue.setName("BookIndexQueue");
@@ -173,14 +170,13 @@ public class Configuration {
 		
 		SourceTypeHandlerFactory.initialize();
 
-		
 		try {
-			LocalizedTermList.initialize(params.getIndexDir(), 
-					params.getLocale());
+			if(params.isLoadTermlistOnStartup()){
+				LocalizedTermList.initialize();
+			}
 		} catch (IOException e) {
 			logger.error("Unable to init termList. Root cause: " + e);
 		}
-		
 		GlobalCache.startUp();
 	}
 

@@ -195,6 +195,5 @@ if(currentLogFile.equals(logFileName)){
 </select>
 </div>
 
-
 </body>
 </html>

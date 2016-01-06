@@ -174,16 +174,21 @@ final class NodeHandler extends SAXHandlerWithStack {
 	    if (arg2 != null)
 		    newBook.setArg2(arg2);
 
-	    //arg1:
+	    //arg3:
 	    String arg3 = (String)atts.get("arg3");
 	    if (arg3 != null)
-		    newBook.setArg1(arg3);
+		    newBook.setArg3(arg3);
 
-	    //arg1:
+	    //arg4:
 	    String arg4 = (String)atts.get("arg4");
 	    if (arg4 != null)
-		    newBook.setArg1(arg4);
-	    
+		    newBook.setArg4(arg4);
+
+	    //arg5:
+	    String arg5 = (String)atts.get("arg5");
+	    if (arg5 != null)
+		    newBook.setArg5(arg5);
+
 	}
 
 }

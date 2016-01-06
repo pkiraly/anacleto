@@ -133,6 +133,7 @@ public class Pager extends TagSupport {
 		else {
 			link = "?offset=";
 		}
+		link = link.replaceAll("&", "&amp;");
 
 		StringBuffer bar = new StringBuffer();
 		Iterator it = numbersList.iterator();

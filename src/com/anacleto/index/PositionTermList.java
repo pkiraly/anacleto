@@ -26,6 +26,7 @@ import com.anacleto.view.TermBean;
  */
 public class PositionTermList {
 	
+	private Logger logger = Logging.getUserEventsLogger();
 	/**
 	 * the field of which we need the term list
 	 */
@@ -59,6 +60,8 @@ public class PositionTermList {
 	public LinkedList getTermsNear(String field, String pattern,
 			int numberOfTerms) throws IOException {
 	
+		logger.debug("Get terms near pattern:" + pattern);
+		
 		if (field == null || field.trim().length() == 0)
 			field = Configuration.getDefaultQueryField();
 	
@@ -71,7 +74,13 @@ public class PositionTermList {
 				.getIndexDir());
 			
 		Locale loc = Configuration.params.getLocale();
-		this.collator = Collator.getInstance(loc);
+		if (loc == null)
+			this.collator = Collator.getInstance();
+		else
+			this.collator = Collator.getInstance(loc);
+		
+		this.collator.setStrength(Collator.PRIMARY);
+		
 		this.patternKey = collator.getCollationKey(pattern);
 		
 		int half = (numberOfTerms+1)/2;
@@ -135,6 +144,7 @@ public class PositionTermList {
 		Iterator it = termColl.iterator();
 		while (it.hasNext()) {
 			String termText = (String) it.next();
+			System.out.println("processing term:" + termText);
 			Term t = new Term(field, termText);
 			if (termText.indexOf("*") == -1){
 				CollationKey termKey = collator.getCollationKey(termText);

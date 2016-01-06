@@ -135,6 +135,7 @@
 	      path="/xmlEditSaveAndApply"
 	      scope="request"
 	      type="com.anacleto.struts.action.admin.XmlEditSaveAndApplyAction" />
+
    </action-mappings>
 
    <message-resources parameter="com.anacleto.struts.ApplicationResources" />
